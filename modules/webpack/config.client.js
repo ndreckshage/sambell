@@ -2,9 +2,13 @@ import webpack from 'webpack';
 import path from 'path';
 // import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import { constants, resolve, loaders, devtool } from './shared';
+import {
+  CLIENT_ENTRY, CLIENT_OUTPUT_DIR, APP_BASE,
+  CLIENT_FILENAME as filename,
+} from './constants';
 
-const entry = path.join(__dirname, '..', 'app', 'startClient.js');
-const outputPath = path.join(__dirname, '..', 'public');
+const entry = path.join(__dirname, '..', APP_BASE, CLIENT_ENTRY);
+const outputPath = path.join(__dirname, '..', CLIENT_OUTPUT_DIR);
 
 export default {
   entry,
@@ -12,6 +16,7 @@ export default {
   module: {
     loaders: [
       loaders.jsLoader,
+      loaders.jsonLoader,
       loaders.cssLoader,
       loaders.imagesLoader,
       loaders.fontsLoader,
@@ -23,9 +28,9 @@ export default {
   ],
   output: {
     path: outputPath,
-    publicPath: '/public/',
+    publicPath: `/${CLIENT_OUTPUT_DIR}/`,
     // filename: PRODUCTION_BUILD ? 'scripts/main-min.js' : 'scripts/main.js',
-    filename: 'client.js',
+    filename,
   },
   devtool,
 };

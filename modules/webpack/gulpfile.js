@@ -10,6 +10,8 @@ import gutil from 'gutil';
 import clientConfig from './config.client';
 import serverConfig from './config.server';
 
+import { SERVER_OUTPUT_DIR, SERVER_FILENAME } from './constants';
+
 const WATCH_MS = 100;
 const TASK_DEFAULT = 'default';
 const TASK_CLIENT = 'webpack-client';
@@ -29,7 +31,7 @@ const webpackWatch = (config, task, done) => {
 
 const nodemonOpts = { execMap: { js: 'node' }, ignore: ['*'], watch: ['foo/'], ext: 'noop' };
 const startServer = () => {
-  const script = path.join(__dirname, '..', 'public', 'server.js');
+  const script = path.join(__dirname, '..', SERVER_OUTPUT_DIR, SERVER_FILENAME);
   nodemon({ ...nodemonOpts, script }).on('restart', () => {
     console.log(chalk.magenta('Restart server...'));
   });

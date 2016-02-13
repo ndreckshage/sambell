@@ -7,9 +7,11 @@
 import domready from 'domready';
 
 // additionalReducers, enableReactRouterRedux, enableDevTools, enableThunk, enableLoop, routes,
-export default () => {
+export default ({
+  routes,
+}) => {
   domready(() => {
-    console.log('client reading..!');
+    console.log(routes);
     // const { store, reducers } = createStore({
     //   additionalReducers, enableReactRouterRedux, enableDevTools, enableThunk, enableLoop, history,
     // });

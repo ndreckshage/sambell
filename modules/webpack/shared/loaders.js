@@ -6,6 +6,11 @@ const jsLoader = {
   loader: 'babel',
 };
 
+const jsonLoader = {
+  test: /\.json$/,
+  loader: 'json-loader',
+};
+
 const cssLoader = {
   test: /\.scss$/,
   loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[local]--[hash:base64:5]!autoprefixer-loader!sass-loader'),
@@ -26,6 +31,7 @@ const fontsLoader = {
 
 export default {
   jsLoader,
+  jsonLoader,
   cssLoader,
   imagesLoader,
   fontsLoader,

@@ -1,7 +1,10 @@
 import 'isomorphic-fetch';
-//
+
+import chalk from 'chalk';
+import path from 'path';
 // import React from 'react';
 import express from 'express';
+import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../webpack/constants';
 // import { match } from 'react-router';
 // import { partial } from 'lodash';
 // import { renderToString } from 'react-dom/server';
@@ -9,11 +12,14 @@ import express from 'express';
 // import { combineReducers as loopCombineReducers } from 'redux-loop';
 // import createStore from './createStore';
 
+const PORT = 8081;
+const PUBLIC_MOUNT = `/${CLIENT_OUTPUT_DIR}`;
+
 const getHtml = (enableClientRender, html = 'hello!!', scriptString = '') => {
   return (
     `<!DOCTYPE html>
     <html>
-      <head>${enableClientRender ? `<script src="/__build__/bundle.js" async></script>` : ''}</head>
+      <head>${enableClientRender ? `<script src="/${CLIENT_OUTPUT_DIR}/${CLIENT_FILENAME}" async></script>` : ''}</head>
       <body style='margin:0;padding:0;'>
         <div id="app" style='padding:20px;box-sizing:border-box;'>${html}</div>
         ${scriptString}
@@ -58,6 +64,10 @@ const getHtml = (enableClientRender, html = 'hello!!', scriptString = '') => {
 //   });
 // };
 
+const serverListening = () => console.log(chalk.cyan(`Server listening on port ${PORT}`)); // eslint-disable-line
+const publicPath = path.join(__dirname, '..', CLIENT_OUTPUT_DIR);
+const publicDirectory = express.static(publicPath);
+
 // additionalReducers, enableServerRender, enableClientRender, enableThunk, enableLoop, routes,
 export default () => {
   const enableClientRender = true;
@@ -65,7 +75,8 @@ export default () => {
   let finalRender = (req, res) => res.status(200).send(getHtml(enableClientRender));
   // if (enableServerRender) finalRender = partial(render, { routes, additionalReducers, enableThunk, enableLoop, enableClientRender });
 
-  express().get('*', finalRender).listen(8081, () => {
-    console.log('Server started: 8081'); // eslint-disable-line
-  });
+  const sb = express();
+  sb.use(PUBLIC_MOUNT, publicDirectory)
+    .get('*', finalRender)
+    .listen(PORT, serverListening);
 };

@@ -2,6 +2,10 @@ import webpack from 'webpack';
 import fs from 'fs';
 import path from 'path';
 import { constants, resolve, loaders, devtool } from './shared';
+import {
+  SERVER_ENTRY, SERVER_OUTPUT_DIR, APP_BASE,
+  SERVER_FILENAME as filename,
+} from './constants';
 
 // import ExtractTextPlugin from 'extract-text-webpack-plugin';
 const bannerPlugin = new webpack.BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false });
@@ -13,8 +17,8 @@ fs.readdirSync(path.join(__dirname, '..', '..', 'node_modules'))
   .filter(backendConfigFilter)
   .forEach(backendConfigEach);
 
-const entry = path.join(__dirname, '..', 'app', 'startServer.js');
-const outputPath = path.join(__dirname, '..', 'public');
+const entry = path.join(__dirname, '..', APP_BASE, SERVER_ENTRY);
+const outputPath = path.join(__dirname, '..', SERVER_OUTPUT_DIR);
 
 module.exports = {
   entry,
@@ -22,6 +26,7 @@ module.exports = {
   module: {
     loaders: [
       loaders.jsLoader,
+      loaders.jsonLoader,
       loaders.cssLoader,
       loaders.imagesLoader,
       loaders.fontsLoader,
@@ -37,9 +42,8 @@ module.exports = {
   ],
   output: {
     path: outputPath,
-    publicPath: '/public/',
     // filename: PRODUCTION_BUILD ? 'server-min.js' : 'server.js',
-    filename: 'server.js',
+    filename,
   },
   devtool,
 };
