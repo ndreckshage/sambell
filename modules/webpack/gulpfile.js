@@ -8,50 +8,33 @@ import chalk from 'chalk';
 import gutil from 'gutil';
 
 import clientConfig from './config.client';
-// import serverConfig from './config.server';
+import serverConfig from './config.server';
 
-gulp.task('webpack-client', (done) => {
-  // let firedDone = false;
-  // webpack(clientConfig).watch(100, () => {
-  //   if (!firedDone) {
-  //     firedDone = true;
-  //     done();
-  //   }
-  //
-  //   console.log(chalk.cyan('Client build complete.'));
-  // });
+const WATCH_MS = 100;
+const TASK_DEFAULT = 'default';
+const TASK_CLIENT = 'webpack-client';
+const TASK_SERVER = 'webpack-server';
 
-  webpack(clientConfig, (err, stats) => {
+const webpackWatch = (config, task, done) => {
+  let firedDone = false;
+  webpack(config).watch(WATCH_MS, (err, stats) => {
     if (err) throw new gutil.PluginError('webpack', err);
-    gutil.log('[webpack]', stats.toString());
-    done();
+    gutil.log(chalk.green(`[${task}]`), stats.toString());
+    if (!firedDone) {
+      firedDone = true;
+      done();
+    }
   });
-});
+};
 
-gulp.task('webpack-server', (done) => {
-  console.log('server');
-  // let firedDone = false;
-  // webpack(serverConfig).watch(100, (err, stats) => {
-  //   if (!firedDone) {
-  //     firedDone = true;
-  //     done();
-  //   }
-  //
-  //   console.log(chalk.cyan('Server build complete.'));
-  //   nodemon.restart();
-  // });
-});
-
-gulp.task('default', ['webpack-server', 'webpack-client'], () => {
-  nodemon({
-    execMap: {
-      js: 'node',
-    },
-    script: path.join(__dirname, 'dist/webpack/server'),
-    ignore: ['*'],
-    watch: ['foo/'],
-    ext: 'noop',
-  }).on('restart', () => {
+const nodemonOpts = { execMap: { js: 'node' }, ignore: ['*'], watch: ['foo/'], ext: 'noop' };
+const startServer = () => {
+  const script = path.join(__dirname, '..', 'public', 'server.js');
+  nodemon({ ...nodemonOpts, script }).on('restart', () => {
     console.log(chalk.magenta('Restart server...'));
   });
-});
+};
+
+gulp.task(TASK_CLIENT, done => webpackWatch(clientConfig, TASK_CLIENT, done));
+gulp.task(TASK_SERVER, done => webpackWatch(serverConfig, TASK_SERVER, done));
+gulp.task(TASK_DEFAULT, [TASK_SERVER, TASK_CLIENT], startServer);

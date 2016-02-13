@@ -3,9 +3,8 @@ import path from 'path';
 // import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import { constants, resolve, loaders, devtool } from './shared';
 
-const entry = path.join(__dirname, '..', 'app', 'createClient.js');
+const entry = path.join(__dirname, '..', 'app', 'startClient.js');
 const outputPath = path.join(__dirname, '..', 'public');
-console.log(entry, outputPath)
 
 export default {
   entry,
@@ -21,7 +20,6 @@ export default {
   plugins: [
     new webpack.DefinePlugin(constants),
     // new ExtractTextPlugin(PRODUCTION_BUILD ? 'styles/main-min.css' : 'styles/main.css'),
-    // new ExtractTextPlugin('styles/main.css'),
   ],
   output: {
     path: outputPath,
