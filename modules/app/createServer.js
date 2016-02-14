@@ -15,13 +15,13 @@ import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../webpack/constants';
 const PORT = 8081;
 const PUBLIC_MOUNT = `/${CLIENT_OUTPUT_DIR}`;
 
-const getHtml = (enableClientRender, html = 'hello!!', scriptString = '') => {
+const getHtml = (mount, enableClientRender, html = '', scriptString = '') => {
   return (
     `<!DOCTYPE html>
     <html>
       <head>${enableClientRender ? `<script src="/${CLIENT_OUTPUT_DIR}/${CLIENT_FILENAME}" async></script>` : ''}</head>
       <body style='margin:0;padding:0;'>
-        <div id="app" style='padding:20px;box-sizing:border-box;'>${html}</div>
+        <div id="${mount}" style='padding:20px;box-sizing:border-box;'>${html}</div>
         ${scriptString}
       </body>
     </html>`
@@ -69,10 +69,12 @@ const publicPath = path.join(__dirname, '..', CLIENT_OUTPUT_DIR);
 const publicDirectory = express.static(publicPath);
 
 // additionalReducers, enableServerRender, enableClientRender, enableThunk, enableLoop, routes,
-export default () => {
+export default gerty => {
+  const { mount } = gerty;
+
   const enableClientRender = true;
-  const enableServerRender = false;
-  let finalRender = (req, res) => res.status(200).send(getHtml(enableClientRender));
+  // const enableServerRender = false;
+  const finalRender = (req, res) => res.status(200).send(getHtml(mount, enableClientRender));
   // if (enableServerRender) finalRender = partial(render, { routes, additionalReducers, enableThunk, enableLoop, enableClientRender });
 
   const sb = express();

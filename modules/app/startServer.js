@@ -1,3 +1,3 @@
 import createServer from './createServer';
-import gerty from './gerty';
+import gerty from './loadGerty';
 createServer(gerty);

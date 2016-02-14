@@ -1,7 +1,3 @@
 import createClient from './createClient';
-import gerty from './gerty';
-
-import x from '/Users/nicholasdreckshage/dev/example-app/x';
-console.log(x);
-
+import gerty from './loadGerty';
 createClient(gerty);

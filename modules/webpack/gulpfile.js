@@ -7,6 +7,7 @@ import minimist from 'minimist';
 import path from 'path';
 import chalk from 'chalk';
 import gutil from 'gutil';
+import fs from 'fs';
 
 import clientConfig from './config.client';
 import serverConfig from './config.server';
@@ -21,6 +22,13 @@ const TASK_SERVER = 'webpack-server';
 const argv = minimist(process.argv.slice(2));
 const { cwd: ORIGINAL_CWD } = argv;
 
+const gertyPath = `${ORIGINAL_CWD}/gerty.js`;
+let gertyExists = false;
+try {
+  fs.accessSync(gertyPath, fs.R_OK);
+  gertyExists = true;
+} catch (e) {} // eslint-disable-line
+
 const webpackWatch = (config, task, done) => {
   let firedDone = false;
   webpack({
@@ -28,7 +36,8 @@ const webpackWatch = (config, task, done) => {
     plugins: [
       ...config.plugins,
       new webpack.DefinePlugin({
-        __ORIGINAL_CWD__: JSON.stringify(ORIGINAL_CWD),
+        __GERTY_EXISTS__: JSON.stringify(gertyExists),
+        __GERTY_PATH__: JSON.stringify(gertyPath),
       }),
     ],
   }).watch(WATCH_MS, (err, stats) => {
