@@ -1,18 +1,6 @@
-# Wake me when it's quitting time.
-
 ```
-npm i --save sambell
-```
-
-```
+npm i -g sambell
 sambell new example-app
-```
-
-```
-sambell run
-```
-
-```
-sambell g route /my-path
-sambell g component MyComponent path
+cd example-app
+npm i && npm start
 ```
