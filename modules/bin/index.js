@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 /* eslint-disable no-console */
 
 import { spawn } from 'child_process';

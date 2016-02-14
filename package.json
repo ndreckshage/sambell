@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "wake me when it's quitting time",
   "main": "lib/bin/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "prepublish": "npm run clean && npm run build"
   },
   "bin": {
-    "sambell": "lib/bin/index.js"
+    "sambell": "lib/bin/index"
   },
   "author": "Nick Dreckshage",
   "license": "MIT",
