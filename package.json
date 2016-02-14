@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "wake me when it's quitting time",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,6 @@
   },
   "author": "Nick Dreckshage",
   "license": "MIT",
-  "peerDependencies": {
-    "react": "^0.14.7",
-    "react-router": "^2.0.0"
-  },
   "devDependencies": {
     "babel-cli": "^6.5.1",
     "babel-loader": "^6.2.2",
