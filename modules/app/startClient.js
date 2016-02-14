@@ -1,8 +1,7 @@
 import createClient from './createClient';
-import gerty from './gerty.json';
-// import routes from
-const routes = 'hello from other app';
+import gerty from './gerty';
 
-createClient({
-  routes,
-});
+import x from '/Users/nicholasdreckshage/dev/example-app/x';
+console.log(x);
+
+createClient(gerty);
