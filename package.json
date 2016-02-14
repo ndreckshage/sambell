@@ -1,8 +1,8 @@
 {
   "name": "sambell",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "wake me when it's quitting time",
-  "main": "index.js",
+  "main": "lib/bin/index.js",
   "scripts": {
     "clean": "rimraf lib",
     "build": "babel ./modules -d lib --ignore '__tests__'",
