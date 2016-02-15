@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "wake me when it's quitting time",
   "main": "lib/bin/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "author": "Nick Dreckshage",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "babel-cli": "^6.5.1",
     "babel-loader": "^6.2.2",
     "babel-preset-es2015": "^6.5.0",
@@ -33,7 +33,9 @@
     "minimist": "^1.2.0",
     "nodemon": "^1.8.1",
     "react-dom": "^0.14.7",
-    "webpack": "^1.12.13",
+    "webpack": "^1.12.13"
+  },
+  "dependencies": {
     "express": "^4.13.4",
     "ground-control": "^0.4.0",
     "isomorphic-fetch": "^2.2.1",
