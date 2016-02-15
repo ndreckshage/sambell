@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "wake me when it's quitting time",
   "main": "lib/bin/index.js",
   "scripts": {
@@ -12,7 +12,9 @@
   },
   "engine": "node 5.x.x",
   "bin": {
-    "sambell": "modules/bin/testbin.js"
+    "sambell": "modules/bin/testbin.js",
+    "sambell2": "lib/bin/testbin.js",
+    "sambell3": "sambell.js"
   },
   "author": "Nick Dreckshage",
   "license": "MIT",

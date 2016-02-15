@@ -1,6 +1,7 @@
-#!/usr/bin/env node
+#! /usr/bin/env node
 /* eslint-disable no-console */
 
+import packageJson from './../../package.json';
 import { spawn } from 'child_process';
 import minimist from 'minimist';
 import chalk from 'chalk';
@@ -35,5 +36,10 @@ if (mainCommand === NEW) {
     spawn('npm', ['run', 'gulp', '--', '--cwd', process.cwd()], { stdio: 'inherit', cwd: __dirname });
   } else {
     console.log(chalk.red('Only development supported.'));
+  }
+} else if (!mainCommand) {
+  const { version, v } = argv;
+  if (v || version) {
+    console.log(chalk.cyan(packageJson.version));
   }
 }
