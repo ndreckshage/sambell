@@ -1,5 +1,5 @@
 {
-  "extends":  "eslint-config-airbnb",
+  "extends":  "airbnb",
   "parser": "babel-eslint",
   "rules": {
     "arrow-body-style": 0,
