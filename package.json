@@ -10,7 +10,6 @@
     "gulp": "gulp --gulpfile=./lib/webpack/gulpfile.js",
     "prepublish": "npm run clean && npm run build"
   },
-  "engine": "node 5.x.x",
   "bin": {
     "sambell": "lib/bin/index.js"
   },
@@ -49,5 +48,9 @@
     "redux-thunk": "^1.0.3",
     "source-map-support": "^0.4.0",
     "webpack": "^1.12.13"
+  },
+  "engines": {
+    "node": ">=5.0.0",
+    "npm": ">=3.3.6"
   }
 }
