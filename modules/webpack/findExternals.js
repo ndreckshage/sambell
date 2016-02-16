@@ -3,7 +3,7 @@ import path from 'path';
 
 const basePath = path.join(__dirname, '..', '..');
 const baseNodeModulesPath = path.join(basePath, 'node_modules');
-const parentNodeModulesPath = path.join(basePath, '..', 'node_modules');
+const parentNodeModulesPath = path.join(basePath, '..');
 
 let baseNodeModulesExists = false;
 let parentNodeModulesExists = false;
