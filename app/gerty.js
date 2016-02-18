@@ -10,13 +10,13 @@ let clientOptions = {};
 let serverOptions = {};
 let envOptions = {};
 
-try {
-  const gertyOptions = require('gerty');
+if (__GERTY_PATH__) {
+  const gertyOptions = require(__GERTY_PATH__);
   universalOptions = gertyOptions.universal;
   clientOptions = gertyOptions.client;
   serverOptions = gertyOptions.server;
   envOptions = gertyOptions.env;
-} catch (e) {
+} else {
   if (__DEV__) console.warn('No gerty.js your application. Add gerty to customize!'); // eslint-disable-line
 } // eslint-disable-line
 

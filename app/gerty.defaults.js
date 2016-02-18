@@ -22,5 +22,5 @@ export const universal = {
   reduxDevTools: true,
   groundControl: true,
   reduxThunk: true,
-  reduxLoop: true,
+  // reduxLoop: true, @TODO
 };

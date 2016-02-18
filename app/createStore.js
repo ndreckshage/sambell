@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose, combineReducers as reduxCombineReducers } from 'redux';
 import { syncHistory, routeReducer } from 'react-router-redux';
-// import { NAMESPACE } from 'modules/constants';
 import { install as installLoop, combineReducers as loopCombineReducers } from 'redux-loop';
 import { isEmpty } from 'lodash';
 import thunk from 'redux-thunk';
