@@ -1,8 +1,7 @@
 import webpack from 'webpack';
-import fs from 'fs';
 import path from 'path';
 import findExternals from './findExternals';
-import { constants, resolve, loaders, devtool } from './shared';
+import { loaders, devtool } from './shared';
 import {
   SERVER_ENTRY, SERVER_OUTPUT_DIR, APP_BASE,
   SERVER_FILENAME as filename,
@@ -12,12 +11,12 @@ import {
 const bannerPlugin = new webpack.BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false });
 
 const externals = findExternals();
-const entry = path.join(__dirname, '..', APP_BASE, SERVER_ENTRY);
-const outputPath = path.join(__dirname, '..', SERVER_OUTPUT_DIR);
+const entry = path.join(__dirname, '..', '..', APP_BASE, SERVER_ENTRY);
+const outputPath = path.join(__dirname, '..', '..', SERVER_OUTPUT_DIR);
 
 module.exports = {
   entry,
-  resolve,
+  devtool,
   module: {
     loaders: [
       loaders.jsLoader,
@@ -32,7 +31,6 @@ module.exports = {
   externals,
   plugins: [
     // new ExtractTextPlugin(PRODUCTION_BUILD ? 'styles/main-min.css' : 'styles/main.css'),
-    new webpack.DefinePlugin(constants),
     bannerPlugin,
   ],
   output: {
@@ -40,5 +38,4 @@ module.exports = {
     // filename: PRODUCTION_BUILD ? 'server-min.js' : 'server.js',
     filename,
   },
-  devtool,
 };

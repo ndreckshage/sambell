@@ -18,7 +18,7 @@ try {
   parentNodeModulesExists = true;
 } catch (e) {} // eslint-disable-line
 
-const filterBin = x => !~['.bin'].indexOf(x);
+const filterBin = x => !~['.bin', 'sambell'].indexOf(x);
 
 export default () => {
   const externals = {};

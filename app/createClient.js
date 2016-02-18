@@ -1,14 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory as history } from 'react-router';
+import routes from 'index';
 // import GroundControl from 'ground-control';
 // import createStore from './createStore';
 // import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
+import { universal } from './gerty';
 
 // additionalReducers, enableReactRouterRedux, enableDevTools, enableThunk, enableLoop, routes,
-export default gerty => {
-  const { mount, routes } = gerty;
+const createClient = () => {
+  const { mount } = universal;
 
   domready(() => {
     // const { store, reducers } = createStore({
@@ -32,3 +34,5 @@ export default gerty => {
     render(<Router {...routerProps} />, document.getElementById(mount));
   });
 };
+
+createClient();

@@ -4,7 +4,8 @@ import chalk from 'chalk';
 import path from 'path';
 // import React from 'react';
 import express from 'express';
-import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../webpack/constants';
+import { universal, server } from './gerty';
+import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../lib/webpack/constants';
 // import { match } from 'react-router';
 // import { partial } from 'lodash';
 // import { renderToString } from 'react-dom/server';
@@ -12,7 +13,6 @@ import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../webpack/constants';
 // import { combineReducers as loopCombineReducers } from 'redux-loop';
 // import createStore from './createStore';
 
-const PORT = 8081;
 const PUBLIC_MOUNT = `/${CLIENT_OUTPUT_DIR}`;
 
 const getHtml = (mount, enableClientRender, html = '', scriptString = '') => {
@@ -64,21 +64,27 @@ const getHtml = (mount, enableClientRender, html = '', scriptString = '') => {
 //   });
 // };
 
-const serverListening = () => console.log(chalk.cyan(`Server listening on port ${PORT}`)); // eslint-disable-line
 const publicPath = path.join(__dirname, '..', CLIENT_OUTPUT_DIR);
 const publicDirectory = express.static(publicPath);
 
 // additionalReducers, enableServerRender, enableClientRender, enableThunk, enableLoop, routes,
-export default gerty => {
-  const { mount } = gerty;
+const createServer = () => {
+  const { mount } = universal;
+  const { port } = server;
 
   const enableClientRender = true;
   // const enableServerRender = false;
   const finalRender = (req, res) => res.status(200).send(getHtml(mount, enableClientRender));
   // if (enableServerRender) finalRender = partial(render, { routes, additionalReducers, enableThunk, enableLoop, enableClientRender });
 
-  const sb = express();
-  sb.use(PUBLIC_MOUNT, publicDirectory)
-    .get('*', finalRender)
-    .listen(PORT, serverListening);
+  // console.log(process.env.PORT);
+
+  const app = express();
+  app.use(PUBLIC_MOUNT, publicDirectory);
+  app.get('*', finalRender);
+  app.listen(port, () => {
+    console.log(chalk.cyan(`Server listening on port ${port}`)); // eslint-disable-line
+  });
 };
+
+createServer();

@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "start": "sambell run -d"
+  },
+  "dependencies": {
+    "react": "^0.14.7",
+    "react-router": "^2.0.0",
+    "sambell": "^0.1.0"
+  }
+}

@@ -1,12 +1,9 @@
-import constants from './constants';
-import resolve from './resolve';
+import setConstants from './setConstants';
 import loaders from './loaders';
-
 const devtool = 'source-map';
 
 export {
-  constants,
-  resolve,
+  setConstants,
   loaders,
   devtool,
 };
