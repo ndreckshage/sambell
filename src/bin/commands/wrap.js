@@ -9,24 +9,26 @@ const cwd = process.cwd();
 
 export default argv => {
   const { _: commands } = argv;
-  const [, target] = commands;
+  const [, current, target] = commands;
+
+  const currentFq = path.join(cwd, current);
+  try {
+    fs.accessSync(currentFq, fs.R_OK);
+  } catch (e) {
+    return console.log(chalk.red(`${current} doesn't exist.`));
+  } // eslint-disable-line
 
   const targetFq = path.join(cwd, target);
-  if (!target) return console.log(chalk.red('Must provide filename (index.js) or app name (my-app).'));
+  if (!target) return console.log(chalk.red('Must provide app name (npm wrap [current.js] [app-name]).'));
   if (!!~target.indexOf('/')) return console.log(chalk.red('No nested support with CLI.'));
-
   try {
     fs.accessSync(targetFq, fs.R_OK);
     return console.log(chalk.red(`${target} already exists.`));
   } catch (e) {} // eslint-disable-line
 
-  if (targetFq.endsWith('.js')) {
-    copy('index.js', targetFq);
-    return console.log(chalk.green(`${target} created. sambell run ${target}`));
-  }
-
   fs.mkdirSync(targetFq);
-  copy('index.js', path.join(targetFq, 'index.js'));
+  copy(currentFq, path.join(targetFq, 'index.js'), false);
+  fs.unlinkSync(currentFq);
   copy('package.json', path.join(targetFq, 'package.json'));
-  return console.log(chalk.green(`${target} created. cd ${target} && sambell run`));
+  return console.log(chalk.green(`${current} wrapped. cd ${target} && sambell run`));
 };

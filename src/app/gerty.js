@@ -17,7 +17,7 @@ if (__GERTY_PATH__) {
   serverOptions = gertyOptions.server;
   envOptions = gertyOptions.env;
 } else {
-  if (__DEV__) console.warn('No gerty.js your application. Add gerty to customize!'); // eslint-disable-line
+  if (__DEV__) console.warn('No gerty.js your application. Add gerty (sambell add --gerty) to customize your app!'); // eslint-disable-line
 } // eslint-disable-line
 
 export const universal = { ...universalDefaults, ...universalOptions };

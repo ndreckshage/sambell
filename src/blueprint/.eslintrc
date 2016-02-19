@@ -5,10 +5,5 @@
     "arrow-body-style": 0,
     "max-len": [2, 150],
     "new-cap": 0
-  },
-  "globals": {
-    "__GERTY_ENV__": true,
-    "__GERTY_ENTRY__": true,
-    "__GERTY_PATH__": true
   }
 }

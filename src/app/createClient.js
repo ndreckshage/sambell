@@ -7,12 +7,7 @@ import { Router, browserHistory as history } from 'react-router';
 import domready from 'domready';
 import { universal } from './gerty';
 
-let entry;
-if (__GERTY_ENTRY__) {
-  entry = require(__GERTY_ENTRY__).default;
-} else {
-  throw new Error('No entry file found!');
-}
+const entry = require(__GERTY_ENTRY__).default;
 
 // additionalReducers, enableReactRouterRedux, enableDevTools, enableThunk, enableLoop, routes,
 const createClient = () => {

@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "wake me when it's quitting time",
   "main": "build/app/index.js",
   "scripts": {
@@ -39,7 +39,6 @@
     "json-loader": "^0.5.4",
     "lodash": "^4.3.0",
     "minimist": "^1.2.0",
-    "ncp": "^2.0.0",
     "nodemon": "^1.8.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",

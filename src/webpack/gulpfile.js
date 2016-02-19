@@ -42,12 +42,6 @@ switch (env) {
     process.env.NODE_ENV = env;
 }
 
-let entryPath = null;
-try {
-  fs.accessSync(path.join(cwd, `${entry}${entry.endsWith('.js') ? '' : '.js'}`), fs.R_OK);
-  entryPath = entry;
-} catch (e) {} // eslint-disable-line
-
 let gertyPath = null;
 try {
   fs.accessSync(path.join(cwd, `${gerty}${gerty.endsWith('.js') ? '' : '.js'}`), fs.R_OK);
@@ -56,7 +50,7 @@ try {
 
 const cliAppOptions = {
   __GERTY_ENV__: JSON.stringify(env),
-  __GERTY_ENTRY__: JSON.stringify(entryPath),
+  __GERTY_ENTRY__: JSON.stringify(entry),
   __GERTY_PATH__: JSON.stringify(gertyPath),
 };
 
