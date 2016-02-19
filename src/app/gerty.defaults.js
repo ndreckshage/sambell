@@ -4,9 +4,7 @@ export const env = { dev, prod };
 
 export const client = {
   render: true,
-  // codeSplitting: true, @TODO
-  // sourcemap: 'sourcemap', @TODO
-  // history: 'browser', @TODO
+  history: 'history',
 };
 
 export const server = {
@@ -18,9 +16,9 @@ export const universal = {
   mount: 'root',
   redux: true,
   reactRouter: true,
-  reactRouterRedux: true,
-  reduxDevTools: true,
+  reactRouterRedux: false,
+  reduxDevTools: false,
   groundControl: true,
-  reduxThunk: true,
-  // reduxLoop: true, @TODO
+  reduxThunk: false,
+  reduxLoop: false,
 };

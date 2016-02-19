@@ -1,43 +1,42 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory as history } from 'react-router';
-// import GroundControl from 'ground-control';
-// import createStore from './createStore';
-// import { combineReducers as loopCombineReducers } from 'redux-loop';
+import GroundControl from 'ground-control';
+import createStore from './createStore';
+import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
 import { universal } from './gerty';
 
 const entry = require(__GERTY_ENTRY__).default;
 
-// additionalReducers, enableReactRouterRedux, enableDevTools, enableThunk, enableLoop, routes,
 const createClient = () => {
-  const { mount, reactRouter } = universal;
-  console.log('createClient!', universal)
+  const {
+    mount, redux: enableRedux,
+    reactRouter: enableReactRouter,
+    groundControl: enableGroundControl,
+    reduxLoop: enableReduxLoop,
+  } = universal;
 
   domready(() => {
-    // const { store, reducers } = createStore({
-    //   additionalReducers, enableReactRouterRedux, enableDevTools, enableThunk, enableLoop, history,
-    // });
-    //
-    // let groundControlsOpts = { store, reducers };
-    // if (enableLoop) groundControlsOpts = { ...groundControlsOpts, combineReducers: loopCombineReducers };
-    // const groundControlProps = props => ({ ...props, ...groundControlsOpts });
-    //
-    // const routerProps = () => ({
-    //   routes, history, render: props => {
-    //     return <GroundControl {...groundControlProps(props)} />;
-    //   },
-    // });
-
-    let app;
-    if (reactRouter) {
-      const routerProps = { routes: entry, history };
-      app = <Router {...routerProps} />;
-    } else {
-      app = entry;
+    let store, reducers; // eslint-disable-line
+    if (enableRedux) {
+      const storeAndReducers = createStore(universal, history);
+      reducers = storeAndReducers.reducers;
+      store = storeAndReducers.store;
     }
 
-    render(app, document.getElementById(mount));
+    if (enableReactRouter) {
+      let routerProps = { routes: entry, history };
+      if (enableGroundControl) {
+        let groundControlsOpts = { store, reducers };
+        if (enableReduxLoop) groundControlsOpts = { ...groundControlsOpts, combineReducers: loopCombineReducers };
+        routerProps = { ...routerProps, render: props => <GroundControl {...props} {...groundControlsOpts} /> };
+      }
+
+      render(<Router {...routerProps} />, document.getElementById(mount));
+    } else {
+      render(entry, document.getElementById(mount));
+    }
   });
 };
 
