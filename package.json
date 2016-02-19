@@ -1,17 +1,17 @@
 {
   "name": "sambell",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "wake me when it's quitting time",
-  "main": "app/index.js",
+  "main": "build/app/index.js",
   "scripts": {
-    "clean": "rimraf lib",
-    "build": "babel ./modules -d lib --ignore '__tests__'",
-    "dev": "babel ./modules --watch -d lib",
-    "gulp": "gulp --gulpfile=./lib/webpack/gulpfile.js",
+    "clean": "rimraf build",
+    "build": "babel ./src -d build --ignore '__tests__'",
+    "dev": "babel ./src --watch -d build",
+    "gulp": "gulp --gulpfile=./build/webpack/gulpfile.js",
     "prepublish": "npm run clean && npm run build"
   },
   "bin": {
-    "sambell": "lib/bin/index.js"
+    "sambell": "build/bin/index.js"
   },
   "author": "Nick Dreckshage",
   "license": "MIT",

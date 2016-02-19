@@ -1,6 +1,4 @@
 node_modules
-lib
-dist
-public
+build
 .DS_STORE
 npm-debug.log

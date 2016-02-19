@@ -13,7 +13,7 @@ import webpackClientConfig from './config.client';
 import webpackServerConfig from './config.server';
 
 import { setConstants } from './shared';
-import { SERVER_OUTPUT_DIR, SERVER_FILENAME } from './constants';
+import { SERVER_OUTPUT_DIR, SERVER_FILENAME, APP_DIR } from './constants';
 
 const TASK_DEFAULT = 'default';
 const TASK_CLIENT = 'webpack-client';
@@ -21,7 +21,8 @@ const TASK_SERVER = 'webpack-server';
 
 const samBellRoot = path.join(__dirname, '..', '..');
 const samBellModules = path.join(samBellRoot, 'node_modules');
-const samBellApp = path.join(samBellRoot, 'app');
+const samBellBuild = path.join(samBellRoot, 'build');
+const samBellApp = path.join(samBellBuild, APP_DIR);
 
 const argv = minimist(process.argv.slice(2));
 const { env, cwd, entry, gerty } = argv;
@@ -63,7 +64,7 @@ const webpackWatch = (config, task, done) => {
   const compiler = webpack({
     ...config,
     resolve: {
-      root: [samBellModules, cwd],
+      root: [samBellModules, samBellBuild, cwd],
       alias: { sambell: samBellApp },
     },
     resolveLoader: { root: [samBellModules] },
@@ -91,7 +92,7 @@ const webpackWatch = (config, task, done) => {
 
 const nodemonOpts = { execMap: { js: 'node' }, ignore: ['*'], watch: ['foo/'], ext: 'noop' };
 const startServer = () => {
-  const script = path.join(__dirname, '..', '..', SERVER_OUTPUT_DIR, SERVER_FILENAME);
+  const script = path.join(samBellRoot, SERVER_OUTPUT_DIR, SERVER_FILENAME);
   nodemon({ ...nodemonOpts, script }).on('restart', () => {
     console.log(chalk.magenta('Restart server...'));
   });

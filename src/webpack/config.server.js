@@ -3,7 +3,7 @@ import path from 'path';
 import findExternals from './findExternals';
 import { loaders, devtool } from './shared';
 import {
-  SERVER_ENTRY, SERVER_OUTPUT_DIR, APP_BASE,
+  SERVER_ENTRY, SERVER_OUTPUT_DIR, APP_DIR,
   SERVER_FILENAME as filename,
 } from './constants';
 
@@ -11,7 +11,7 @@ import {
 const bannerPlugin = new webpack.BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false });
 
 const externals = findExternals();
-const entry = path.join(__dirname, '..', '..', APP_BASE, SERVER_ENTRY);
+const entry = path.join(__dirname, '..', '..', APP_DIR, SERVER_ENTRY);
 const outputPath = path.join(__dirname, '..', '..', SERVER_OUTPUT_DIR);
 
 module.exports = {

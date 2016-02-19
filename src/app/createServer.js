@@ -5,7 +5,7 @@ import path from 'path';
 // import React from 'react';
 import express from 'express';
 import { universal, server } from './gerty';
-import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../lib/webpack/constants';
+import { CLIENT_OUTPUT_DIR, CLIENT_PUBLIC_MOUNT, CLIENT_FILENAME } from './../webpack/constants';
 // import { match } from 'react-router';
 // import { partial } from 'lodash';
 // import { renderToString } from 'react-dom/server';
@@ -13,15 +13,15 @@ import { CLIENT_OUTPUT_DIR, CLIENT_FILENAME } from './../lib/webpack/constants';
 // import { combineReducers as loopCombineReducers } from 'redux-loop';
 // import createStore from './createStore';
 
-const PUBLIC_MOUNT = `/${CLIENT_OUTPUT_DIR}`;
+const clientOutputDir = path.join(__dirname, '..', '..', CLIENT_OUTPUT_DIR);
 
 const getHtml = (mount, enableClientRender, html = '', scriptString = '') => {
   return (
     `<!DOCTYPE html>
     <html>
-      <head>${enableClientRender ? `<script src="/${CLIENT_OUTPUT_DIR}/${CLIENT_FILENAME}" async></script>` : ''}</head>
-      <body style='margin:0;padding:0;'>
-        <div id="${mount}" style='padding:20px;box-sizing:border-box;'>${html}</div>
+      <head>${enableClientRender ? `<script src="${CLIENT_PUBLIC_MOUNT}/${CLIENT_FILENAME}" async></script>` : ''}</head>
+      <body>
+        <div id="${mount}">${html}</div>
         ${scriptString}
       </body>
     </html>`
@@ -64,9 +64,6 @@ const getHtml = (mount, enableClientRender, html = '', scriptString = '') => {
 //   });
 // };
 
-const publicPath = path.join(__dirname, '..', CLIENT_OUTPUT_DIR);
-const publicDirectory = express.static(publicPath);
-
 // additionalReducers, enableServerRender, enableClientRender, enableThunk, enableLoop, routes,
 const createServer = () => {
   const { mount } = universal;
@@ -77,10 +74,8 @@ const createServer = () => {
   const finalRender = (req, res) => res.status(200).send(getHtml(mount, enableClientRender));
   // if (enableServerRender) finalRender = partial(render, { routes, additionalReducers, enableThunk, enableLoop, enableClientRender });
 
-  // console.log(process.env.PORT);
-
   const app = express();
-  app.use(PUBLIC_MOUNT, publicDirectory);
+  app.use(CLIENT_PUBLIC_MOUNT, express.static(clientOutputDir));
   app.get('*', finalRender);
   app.listen(port, () => {
     console.log(chalk.cyan(`Server listening on port ${port}`)); // eslint-disable-line

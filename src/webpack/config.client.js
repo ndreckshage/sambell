@@ -2,11 +2,11 @@ import path from 'path';
 // import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import { loaders, devtool } from './shared';
 import {
-  CLIENT_ENTRY, CLIENT_OUTPUT_DIR, APP_BASE,
+  CLIENT_ENTRY, CLIENT_OUTPUT_DIR, CLIENT_PUBLIC_MOUNT, APP_DIR,
   CLIENT_FILENAME as filename,
 } from './constants';
 
-const entry = path.join(__dirname, '..', '..', APP_BASE, CLIENT_ENTRY);
+const entry = path.join(__dirname, '..', '..', APP_DIR, CLIENT_ENTRY);
 const outputPath = path.join(__dirname, '..', '..', CLIENT_OUTPUT_DIR);
 
 export default {
@@ -26,7 +26,7 @@ export default {
   ],
   output: {
     path: outputPath,
-    publicPath: `/${CLIENT_OUTPUT_DIR}/`,
+    publicPath: CLIENT_PUBLIC_MOUNT,
     // filename: PRODUCTION_BUILD ? 'scripts/main-min.js' : 'scripts/main.js',
     filename,
   },
