@@ -5,7 +5,7 @@ import GroundControl from 'ground-control';
 import createStore from './createStore';
 import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
-import { universal } from './gerty';
+import { universal, client } from './gerty';
 
 const entry = require(__GERTY_ENTRY__).default;
 
@@ -40,4 +40,4 @@ const createClient = () => {
   });
 };
 
-createClient();
+if (client.render) createClient();

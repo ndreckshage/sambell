@@ -6,8 +6,9 @@ import thunk from 'redux-thunk';
 export default (universal, history) => {
   const {
     reduxThunk: enableThunk,
-    reactRouterRedux: enableReactRouterRedux,
     reduxLoop: enableReduxLoop,
+    reactRouterRedux: enableReactRouterRedux,
+    groundControl: enableGroundControl,
     reduxDevTools: enableDevTools,
   } = universal;
 
@@ -19,13 +20,12 @@ export default (universal, history) => {
 
   let storeEnhancers = [];
   if (enableReduxLoop) storeEnhancers = storeEnhancers.concat(installLoop()); // this should come last, but devtools causes issue
-  if (enableDevTools) storeEnhancers = storeEnhancers.concat(window.devToolsExtension ? window.devToolsExtension() : f => f);
+  if (enableDevTools && typeof window !== 'undefined') storeEnhancers = storeEnhancers.concat(window.devToolsExtension ? window.devToolsExtension() : f => f);
 
-  let reducers = {};
+  const reducers = {};
   const defaultReducer = (state = {}) => state;
-
   if (enableReactRouterRedux) reducers.routing = routeReducer;
-  reducers = { groundcontrol: defaultReducer, ...reducers };
+  if (enableGroundControl) reducers.groundcontrol = defaultReducer;
 
   const combineReducers = enableReduxLoop ? loopCombineReducers : reduxCombineReducers;
   const reducer = combineReducers(reducers);
