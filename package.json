@@ -1,12 +1,12 @@
 {
   "name": "sambell",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "wake me when it's quitting time",
   "main": "build/app/index.js",
   "scripts": {
+    "start": "babel ./src --watch -d build",
     "clean": "rimraf build",
     "build": "babel ./src -d build --ignore '__tests__'",
-    "dev": "babel ./src --watch -d build",
     "gulp": "gulp --gulpfile=./build/webpack/gulpfile.js",
     "prepublish": "npm run clean && npm run build"
   },

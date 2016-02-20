@@ -18,17 +18,18 @@ export default argv => {
     return console.log(chalk.red(`${current} doesn't exist.`));
   } // eslint-disable-line
 
-  const targetFq = path.join(cwd, target);
-  if (!target) return console.log(chalk.red('Must provide app name (npm wrap [current.js] [app-name]).'));
-  if (!!~target.indexOf('/')) return console.log(chalk.red('No nested support with CLI.'));
+  const adjustedTarget = target || current.split('.js')[0];
+  const targetFq = path.join(cwd, adjustedTarget);
+  if (!!~adjustedTarget.indexOf('/')) return console.log(chalk.red('No nested support with CLI.'));
   try {
     fs.accessSync(targetFq, fs.R_OK);
-    return console.log(chalk.red(`${target} already exists.`));
+    return console.log(chalk.red(`${adjustedTarget} already exists.`));
   } catch (e) {} // eslint-disable-line
 
   fs.mkdirSync(targetFq);
   copy(currentFq, path.join(targetFq, 'index.js'), false);
   fs.unlinkSync(currentFq);
   copy('package.json', path.join(targetFq, 'package.json'));
+  copy('gerty.js', path.join(targetFq, 'gerty.js'));
   return console.log(chalk.green(`${current} wrapped. cd ${target} && sambell run`));
 };

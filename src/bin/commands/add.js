@@ -8,16 +8,16 @@ import { spawn } from 'child_process';
 
 const cwd = process.cwd();
 
-const installGerty = () => {
-  const currentGerty = path.join(cwd, 'gerty.js');
-  try {
-    fs.accessSync(currentGerty, fs.R_OK);
-    return console.log(chalk.red(`Gerty already exists.`));
-  } catch (e) {} // eslint-disable-line
+const installLocal = () => {
+  return console.log(chalk.red('Coming soon.'));
+};
 
-  const gertyDefault = path.join(__dirname, '..', '..', '..', 'src', 'app', 'gerty.defaults.js');
-  copy(gertyDefault, path.join(cwd, 'gerty.js'), false);
-  return console.log(chalk.green(`Gerty installed with default options.`));
+const installBabel = () => {
+  return console.log(chalk.red(`Coming soon.`));
+};
+
+const installDocker = () => {
+  return console.log(chalk.red('Coming soon.'));
 };
 
 const installEslint = () => {
@@ -53,9 +53,14 @@ const installGit = () => {
 };
 
 export default argv => {
-  const { gerty, eslint, git } = argv;
+  const {
+    local, git, eslint,
+    babel, docker,
+  } = argv;
 
-  if (gerty) installGerty();
-  if (eslint) installEslint();
+  if (local) installLocal();
   if (git) installGit();
+  if (eslint) installEslint();
+  if (babel) installBabel();
+  if (docker) installDocker();
 };

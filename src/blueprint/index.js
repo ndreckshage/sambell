@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Route, IndexRoute, Link } from 'react-router';
 
-const Layout = ({ children }) => (
+const Layout = props => (
   <div>
     <div>
       <Link to="/">Page 1</Link>
       <Link to="/page-2">Page 2</Link>
     </div>
-    {children}
+    {props.children}
   </div>
 );
+
+Layout.propTypes = { children: PropTypes.element.isRequired };
 
 const reducer = (state = { counter: 0 }, action) => {
   if (action.type === 'incr') return { ...state, counter: state.counter + 1 };
   return state;
 };
 
-const PageOne = ({ dispatch, data: { counter } }) => {
+const PageOne = props => {
+  const { dispatch, data: { counter } } = props;
   const incr = () => { dispatch({ type: 'incr' }); };
   return (
     <div>
@@ -27,11 +30,12 @@ const PageOne = ({ dispatch, data: { counter } }) => {
   );
 };
 
-const PageTwo = () => (
-  <div>
-    <p>Page 2</p>
-  </div>
-);
+PageOne.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
+};
+
+const PageTwo = () => <div><p>Page 2</p></div>;
 
 export default (
   <Route path="/" component={Layout}>

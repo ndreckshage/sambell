@@ -28,5 +28,6 @@ export default argv => {
   fs.mkdirSync(targetFq);
   copy('index.js', path.join(targetFq, 'index.js'));
   copy('package.json', path.join(targetFq, 'package.json'));
+  copy('gerty.js', path.join(targetFq, 'gerty.js'));
   return console.log(chalk.green(`${target} created. cd ${target} && sambell run`));
 };
