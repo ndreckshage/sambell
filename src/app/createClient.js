@@ -7,6 +7,8 @@ import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
 import { universal, client } from './gerty';
 
+// console.log('createClient', __CLIENT__, __SERVER__);
+
 const entry = require(__GERTY_ENTRY__).default;
 
 const createClient = () => {

@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "wake me when it's quitting time",
   "main": "build/app/index.js",
   "scripts": {

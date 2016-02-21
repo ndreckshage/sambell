@@ -9,6 +9,10 @@
   "globals": {
     "__GERTY_ENV__": true,
     "__GERTY_ENTRY__": true,
-    "__GERTY_PATH__": true
+    "__GERTY_PATH__": true,
+    "__DEV__": true,
+    "__PROD__": true,
+    "__CLIENT__": true,
+    "__SERVER__": true
   }
 }

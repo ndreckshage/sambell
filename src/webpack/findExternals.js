@@ -13,10 +13,12 @@ try {
   baseNodeModulesExists = true;
 } catch (e) {} // eslint-disable-line
 
-try {
-  fs.accessSync(parentNodeModulesPath, fs.R_OK);
-  parentNodeModulesExists = true;
-} catch (e) {} // eslint-disable-line
+if (parentNodeModulesPath.endsWith('/node_modules')) {
+  try {
+    fs.accessSync(parentNodeModulesPath, fs.R_OK);
+    parentNodeModulesExists = true;
+  } catch (e) {} // eslint-disable-line
+}
 
 const filterBin = x => !~['.bin', 'sambell'].indexOf(x);
 
@@ -27,6 +29,7 @@ export default () => {
   let nodeModules = [];
   if (baseNodeModulesExists) nodeModules = nodeModules.concat(fs.readdirSync(baseNodeModulesPath));
   if (parentNodeModulesExists) nodeModules = nodeModules.concat(fs.readdirSync(parentNodeModulesPath));
+  // console.log(nodeModules);
   nodeModules.filter(filterBin).forEach(normalizeExternals);
 
   return externals;
