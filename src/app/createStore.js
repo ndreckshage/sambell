@@ -20,7 +20,7 @@ export default (universal, history) => {
 
   let storeEnhancers = [];
   if (enableReduxLoop) storeEnhancers = storeEnhancers.concat(installLoop()); // this should come last, but devtools causes issue
-  if (enableDevTools && typeof window !== 'undefined') storeEnhancers = storeEnhancers.concat(window.devToolsExtension ? window.devToolsExtension() : f => f);
+  if (enableDevTools && __CLIENT__ && window.devToolsExtension) storeEnhancers = storeEnhancers.concat(window.devToolsExtension());
 
   const reducers = {};
   const defaultReducer = (state = {}) => state;
@@ -37,5 +37,8 @@ export default (universal, history) => {
 
   if (reactRouterReduxMiddleware) reactRouterReduxMiddleware.listenForReplays(store);
 
-  return { store, reducers };
+  return {
+    reducers,
+    store,
+  };
 };

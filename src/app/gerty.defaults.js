@@ -4,7 +4,7 @@ export const env = { dev, prod };
 
 export const client = {
   render: true,
-  history: 'history',
+  html5History: true,
 };
 
 export const server = {

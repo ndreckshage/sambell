@@ -19,13 +19,13 @@ const TASK_DEFAULT = 'default';
 const TASK_CLIENT = 'webpack-client';
 const TASK_SERVER = 'webpack-server';
 
+const argv = minimist(process.argv.slice(2));
+const { env, cwd, entry, gerty } = argv;
+
 const samBellRoot = path.join(__dirname, '..', '..');
 const samBellModules = path.join(samBellRoot, 'node_modules');
 const samBellBuild = path.join(samBellRoot, 'build');
 const samBellApp = path.join(samBellBuild, APP_DIR);
-
-const argv = minimist(process.argv.slice(2));
-const { env, cwd, entry, gerty } = argv;
 
 switch (env) {
   case 'd':
@@ -48,13 +48,20 @@ try {
   gertyPath = gerty;
 } catch (e) {} // eslint-disable-line
 
-const cliAppOptions = {
+let cliAppOptions = {
   __GERTY_ENV__: JSON.stringify(env),
   __GERTY_ENTRY__: JSON.stringify(entry),
   __GERTY_PATH__: JSON.stringify(gertyPath),
 };
 
 const webpackWatch = (config, task, done) => {
+  let firedDone = false;
+  cliAppOptions = {
+    ...cliAppOptions,
+    __CLIENT__: JSON.stringify(task === TASK_CLIENT),
+    __SERVER__: JSON.stringify(task === TASK_SERVER),
+  };
+
   const compiler = webpack({
     ...config,
     resolve: {
@@ -75,13 +82,17 @@ const webpackWatch = (config, task, done) => {
     if (jsonStats.errors.length > 0) gutil.log(chalk.red(jsonStats.errors));
     if (jsonStats.warnings.length > 0) gutil.log(chalk.yellow(jsonStats.warnings));
     if (jsonStats.errors.length === 0 && jsonStats.warnings.length === 0) gutil.log(chalk.green(`[${task}]`), stats.toString());
-    done();
+    if (task === TASK_SERVER) nodemon.restart();
+
+    if (!firedDone) {
+      firedDone = true;
+      done();
+    }
   };
 
-  compiler.run(cb);
-  // compiler.watch({
-  //   aggregateTimeout: 300,
-  // }, cb);
+  compiler.watch({
+    aggregateTimeout: 300,
+  }, cb);
 };
 
 const nodemonOpts = { execMap: { js: 'node' }, ignore: ['*'], watch: ['foo/'], ext: 'noop' };

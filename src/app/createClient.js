@@ -1,13 +1,13 @@
+import 'babel-polyfill';
+
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, browserHistory as history } from 'react-router';
+import { Router, browserHistory, hashHistory } from 'react-router';
 import GroundControl from 'ground-control';
 import createStore from './createStore';
 import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
 import { universal, client } from './gerty';
-
-// console.log('createClient', __CLIENT__, __SERVER__);
 
 const entry = require(__GERTY_ENTRY__).default;
 
@@ -19,6 +19,10 @@ const createClient = () => {
     reduxLoop: enableReduxLoop,
   } = universal;
 
+  const { html5History } = client;
+  let history = browserHistory;
+  if (!html5History) history = hashHistory;
+
   domready(() => {
     let store, reducers; // eslint-disable-line
     if (enableRedux) {
@@ -29,7 +33,7 @@ const createClient = () => {
 
     if (enableReactRouter) {
       let routerProps = { routes: entry, history };
-      if (enableGroundControl) {
+      if (enableRedux && enableGroundControl) {
         let groundControlsOpts = { store, reducers };
         if (enableReduxLoop) groundControlsOpts = { ...groundControlsOpts, combineReducers: loopCombineReducers };
         routerProps = { ...routerProps, render: props => <GroundControl {...props} {...groundControlsOpts} /> };

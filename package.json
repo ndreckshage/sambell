@@ -1,11 +1,11 @@
 {
   "name": "sambell",
-  "version": "0.1.21",
-  "description": "wake me when it's quitting time",
+  "version": "0.1.22",
+  "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
-    "start": "babel ./src --watch -d build",
     "clean": "rimraf build",
+    "start": "babel ./src --watch -d build",
     "build": "babel ./src -d build --ignore '__tests__'",
     "gulp": "gulp --gulpfile=./build/webpack/gulpfile.js",
     "prepublish": "npm run clean && npm run build"
@@ -24,9 +24,10 @@
     "babel-cli": "^6.5.1",
     "babel-eslint": "^4.1.8",
     "babel-loader": "^6.2.2",
+    "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
-    "babel-preset-stage-1": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.1",
     "domready": "^1.0.8",
     "dotenv": "^2.0.0",

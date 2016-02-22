@@ -5,15 +5,12 @@ import chalk from 'chalk';
 import fs from 'fs';
 import copy from './lib/copy';
 import { spawn } from 'child_process';
+import packageJson from './../../../package.json';
 
 const cwd = process.cwd();
 
 const installLocal = () => {
-  return console.log(chalk.red('Coming soon.'));
-};
-
-const installBabel = () => {
-  return console.log(chalk.red(`Coming soon.`));
+  spawn('npm', ['i', '--save', `sambell@${packageJson.version}`], { stdio: 'inherit' });
 };
 
 const installDocker = () => {
@@ -30,10 +27,10 @@ const installEslint = () => {
   copy('.eslintrc', path.join(cwd, '.eslintrc'));
   const eslintOpts = [
     'i', '--save-dev',
-    'eslint@1.10.3',
-    'eslint-config-airbnb@5.0.1',
-    'eslint-plugin-react@3.16.1',
-    'babel-eslint@4.1.8',
+    `eslint@${packageJson.devDependencies.eslint}`,
+    `eslint-config-airbnb@${packageJson.devDependencies['eslint-config-airbnb']}`,
+    `eslint-plugin-react@${packageJson.devDependencies['eslint-plugin-react']}`,
+    `babel-eslint@${packageJson.dependencies['babel-eslint']}`,
   ];
 
   spawn('npm', eslintOpts, { stdio: 'inherit' });
@@ -53,14 +50,10 @@ const installGit = () => {
 };
 
 export default argv => {
-  const {
-    local, git, eslint,
-    babel, docker,
-  } = argv;
+  const { local, git, eslint, docker } = argv;
 
   if (local) installLocal();
   if (git) installGit();
   if (eslint) installEslint();
-  if (babel) installBabel();
   if (docker) installDocker();
 };
