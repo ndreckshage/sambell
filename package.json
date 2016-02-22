@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -54,5 +54,29 @@
   "engines": {
     "node": ">=5.0.0",
     "npm": ">=3.3.6"
-  }
+  },
+  "tags": [
+    "react",
+    "flux",
+    "redux",
+    "react-router",
+    "redux-simple-router",
+    "ground-control",
+    "universal",
+    "isomorphic",
+    "starter kit",
+    "react starter kit"
+  ],
+  "keywords": [
+    "react",
+    "flux",
+    "redux",
+    "react-router",
+    "redux-simple-router",
+    "ground-control",
+    "universal",
+    "isomorphic",
+    "starter kit",
+    "react starter kit"
+  ]
 }

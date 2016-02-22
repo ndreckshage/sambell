@@ -1,5 +1,3 @@
-# WIP - NOT READY FOR REGULAR USE
-
 # Create a universal, single page app with a single file.
 
 - Quickly prototype. Focus on app code, not initial setup.
@@ -27,8 +25,8 @@ sambell wrap app.js
 
 And you have a basic project structure with a package.json, gerty.js (to configure sambell).
 
-## Step 3 (Add more)
+## Step 3 (Add more with a few flags / whatever you want)
 ```
-sambell add --eslint --git
+sambell add --local --eslint --git
 npm i --save immutable
 ```
