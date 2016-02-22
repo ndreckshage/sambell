@@ -42,4 +42,5 @@ npm i --save immutable
 - Babel with babel-preset-es2015; babel-preset-stage-0; babel-preset-react
 - Absolute path requires from your app root (```import routes from 'routes'```)
 - CLI with a few comments (new; run; wrap; add -- src/bin, better documentation coming)
+- Configurable with gerty.js! (src/app/gerty.defaults.js)
 - Everything behind the scenes, just focus on app code for a quick prototype!
