@@ -1,3 +1,5 @@
+**IMPORTANT!** This a beta! Use cautiously until we release 1.0
+
 # Create a universal, single page app with 1 file.
 
 - Quickly prototype. Focus on app code, not initial setup.
