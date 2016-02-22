@@ -1,4 +1,4 @@
-# Create a universal, single page app with a single file.
+# Create a universal, single page app with 1 file.
 
 - Quickly prototype. Focus on app code, not initial setup.
 - No eslintrc, babelrc, package.json, node_modules, webpack setup. All behind the scenes!
