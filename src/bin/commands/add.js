@@ -44,7 +44,7 @@ const installGit = () => {
     return console.log(chalk.red(`.gitignore already exists.`));
   } catch (e) {} // eslint-disable-line
 
-  copy('.gitignore', path.join(cwd, '.gitignore'));
+  copy('gitignore', path.join(cwd, '.gitignore'));
   spawn('git', ['init', '.'], { stdio: 'inherit' });
   return console.log(chalk.green(`.gitignore installed & git initialized.`));
 };
