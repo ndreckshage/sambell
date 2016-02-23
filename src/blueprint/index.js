@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { Route, IndexRoute, Link } from 'react-router';
 
 const Layout = props => (
@@ -10,8 +10,6 @@ const Layout = props => (
     {props.children}
   </div>
 );
-
-Layout.propTypes = { children: PropTypes.element.isRequired };
 
 const reducer = (state = { counter: 0 }, action) => {
   if (action.type === 'incr') return { ...state, counter: state.counter + 1 };
@@ -28,11 +26,6 @@ const PageOne = props => {
       <button onClick={incr}>+</button>
     </div>
   );
-};
-
-PageOne.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
 };
 
 const PageTwo = () => <div><p>Page 2</p></div>;
