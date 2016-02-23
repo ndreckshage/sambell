@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, compose, combineReducers as reduxCombineR
 import { syncHistory, routeReducer } from 'react-router-redux';
 import { install as installLoop, combineReducers as loopCombineReducers } from 'redux-loop';
 import thunk from 'redux-thunk';
+import { isEmpty } from 'lodash';
 
 export default (universal, history) => {
   const {
@@ -10,6 +11,8 @@ export default (universal, history) => {
     reactRouterRedux: enableReactRouterRedux,
     groundControl: enableGroundControl,
     reduxDevTools: enableDevTools,
+    initialState,
+    reducers,
   } = universal;
 
   let middleware = [];
@@ -22,15 +25,14 @@ export default (universal, history) => {
   if (enableReduxLoop) storeEnhancers = storeEnhancers.concat(installLoop()); // this should come last, but devtools causes issue
   if (enableDevTools && __CLIENT__ && window.devToolsExtension) storeEnhancers = storeEnhancers.concat(window.devToolsExtension());
 
-  const reducers = {};
   const defaultReducer = (state = {}) => state;
   if (enableReactRouterRedux) reducers.routing = routeReducer;
   if (enableGroundControl) reducers.groundcontrol = defaultReducer;
 
   const combineReducers = enableReduxLoop ? loopCombineReducers : reduxCombineReducers;
-  const reducer = combineReducers(reducers);
+  const reducer = isEmpty(reducers) ? defaultReducer : combineReducers(reducers);
 
-  const store = createStore(reducer, {}, compose(
+  const store = createStore(reducer, initialState, compose(
     applyMiddleware(...middleware),
     ...storeEnhancers
   ));

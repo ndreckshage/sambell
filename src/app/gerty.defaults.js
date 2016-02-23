@@ -15,9 +15,11 @@ export const server = {
 export const universal = {
   mount: 'root',
   redux: true,
+  reducers: {},
+  initialState: {},
+  reduxDevTools: true,
   reactRouter: true,
   reactRouterRedux: true,
-  reduxDevTools: true,
   groundControl: true,
   reduxThunk: false,
   reduxLoop: false,

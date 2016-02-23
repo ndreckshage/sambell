@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -43,6 +43,7 @@
     "nodemon": "^1.8.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^3.0.0",
     "redux": "^3.3.1",

@@ -1,10 +1,11 @@
 import 'babel-polyfill';
 
-import React from 'react';
+import React, { createElement } from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory, hashHistory } from 'react-router';
 import GroundControl from 'ground-control';
 import createStore from './createStore';
+import { Provider } from 'react-redux';
 import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
 import { universal, client } from './gerty';
@@ -31,6 +32,7 @@ const createClient = () => {
       store = storeAndReducers.store;
     }
 
+    let container;
     if (enableReactRouter) {
       let routerProps = { routes: entry, history };
       if (enableRedux && enableGroundControl) {
@@ -39,10 +41,19 @@ const createClient = () => {
         routerProps = { ...routerProps, render: props => <GroundControl {...props} {...groundControlsOpts} /> };
       }
 
-      render(<Router {...routerProps} />, document.getElementById(mount));
+      container = <Router {...routerProps} />;
     } else {
-      render(entry, document.getElementById(mount));
+      container = createElement(entry);
     }
+
+    let finalContainer;
+    if (enableRedux) {
+      finalContainer = <Provider store={store} children={container} />;
+    } else {
+      finalContainer = container;
+    }
+
+    render(finalContainer, document.getElementById(mount));
   });
 };
 
