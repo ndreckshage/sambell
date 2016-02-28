@@ -9,12 +9,39 @@ import packageJson from './../../../package.json';
 
 const cwd = process.cwd();
 
+const dependencies = [
+  'babel-polyfill', 'chalk', 'domready', 'express',
+  'ground-control', 'isomorphic-fetch', 'lodash', 'react',
+  'react-dom', 'react-redux', 'react-router', 'react-router-redux',
+  'redux', 'redux-loop', 'redux-thunk', 'source-map-support',
+];
+
 const installLocal = () => {
-  spawn('npm', ['i', '--save', `sambell@${packageJson.version}`], { stdio: 'inherit' });
+  const packages = [
+    `sambell@${packageJson.version}`,
+    ...dependencies.map(dep => `${dep}@${packageJson.dependencies[dep]}`),
+  ];
+
+  spawn('npm', ['i', '--save', ...packages], { stdio: 'inherit' });
 };
 
 const installDocker = () => {
-  return console.log(chalk.red('Coming soon.'));
+  const currentDockerfile = path.join(cwd, 'Dockerfile');
+  const currentDockerCompose = path.join(cwd, 'docker-compose.yml');
+  const currentDockerIgnore = path.join(cwd, '.dockerignore');
+
+  try {
+    fs.accessSync(currentDockerfile, fs.R_OK);
+    fs.accessSync(currentDockerCompose, fs.R_OK);
+    fs.accessSync(currentDockerIgnore, fs.R_OK);
+    return console.log(chalk.red(`Docker setup already exists.`));
+  } catch (e) {} // eslint-disable-line
+
+  copy('Dockerfile', path.join(cwd, 'Dockerfile'));
+  copy('docker-compose.yml', path.join(cwd, 'docker-compose.yml'));
+  copy('dockerignore', path.join(cwd, '.dockerignore'));
+  spawn('docker-compose', ['build'], { stdio: 'inherit' });
+  return console.log(chalk.green(`Docker installed.`));
 };
 
 const installEslint = () => {

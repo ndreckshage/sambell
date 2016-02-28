@@ -1,0 +1,7 @@
+build
+node_modules
+.sass-cache
+.git
+.DS_Store
+npm-debug.log
+docker-compose.yml

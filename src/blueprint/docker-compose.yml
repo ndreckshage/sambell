@@ -1,0 +1,6 @@
+web:
+  build: ./
+  environment:
+    PORT: 3000
+  ports:
+    - 3000

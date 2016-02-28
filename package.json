@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -30,7 +30,6 @@
     "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.1",
     "domready": "^1.0.8",
-    "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "ground-control": "^0.4.2",

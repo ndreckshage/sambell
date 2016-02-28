@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import path from 'path';
 import fs from 'fs';
 
-export default argv => {
+export default (argv, cmd) => {
   const {
     _: [, entry],
     gerty,
@@ -17,7 +17,7 @@ export default argv => {
   const adjustedGerty = gerty || 'gerty';
 
   const args = [
-    'run', 'gulp', '--',
+    'run', 'gulp', cmd, '--',
     '--cwd', cwd,
     '--env', adjustedEnv,
     '--entry', adjustedEntry,

@@ -13,11 +13,17 @@ import webpackClientConfig from './config.client';
 import webpackServerConfig from './config.server';
 
 import { setConstants } from './shared';
-import { SERVER_OUTPUT_DIR, SERVER_FILENAME, APP_DIR } from './constants';
+import { SERVER_OUTPUT_DIR, SERVER_FILENAME, APP_DIR, JS_EXT, MINIFIED } from './constants';
+
+const CLIENT = 'client';
+const SERVER = 'server';
 
 const TASK_DEFAULT = 'default';
-const TASK_CLIENT = 'webpack-client';
-const TASK_SERVER = 'webpack-server';
+const TASK_BUILD = 'build';
+const TASK_CLIENT_RUN = 'webpack-client-run';
+const TASK_SERVER_RUN = 'webpack-server-run';
+const TASK_CLIENT_BUILD = 'webpack-client-build';
+const TASK_SERVER_BUILD = 'webpack-server-build';
 
 const argv = minimist(process.argv.slice(2));
 const { env, cwd, entry, gerty } = argv;
@@ -44,7 +50,7 @@ switch (env) {
 
 let gertyPath = null;
 try {
-  fs.accessSync(path.join(cwd, `${gerty}${gerty.endsWith('.js') ? '' : '.js'}`), fs.R_OK);
+  fs.accessSync(path.join(cwd, `${gerty}${gerty.endsWith(JS_EXT) ? '' : JS_EXT}`), fs.R_OK);
   gertyPath = gerty;
 } catch (e) {} // eslint-disable-line
 
@@ -54,15 +60,14 @@ let cliAppOptions = {
   __GERTY_PATH__: JSON.stringify(gertyPath),
 };
 
-const webpackWatch = (config, task, done) => {
-  let firedDone = false;
+const compiler = (config, task) => {
   cliAppOptions = {
     ...cliAppOptions,
-    __CLIENT__: JSON.stringify(task === TASK_CLIENT),
-    __SERVER__: JSON.stringify(task === TASK_SERVER),
+    __CLIENT__: JSON.stringify(task === TASK_CLIENT_RUN),
+    __SERVER__: JSON.stringify(task === TASK_SERVER_RUN),
   };
 
-  const compiler = webpack({
+  return webpack({
     ...config,
     resolve: {
       root: [samBellModules, samBellBuild, cwd],
@@ -75,34 +80,50 @@ const webpackWatch = (config, task, done) => {
       new webpack.DefinePlugin(cliAppOptions),
     ],
   });
+};
 
-  const cb = (err, stats) => {
-    if (err) throw new gutil.PluginError('webpack', err);
-    const jsonStats = stats.toJson();
-    if (jsonStats.errors.length > 0) gutil.log(chalk.red(jsonStats.errors));
-    if (jsonStats.warnings.length > 0) gutil.log(chalk.yellow(jsonStats.warnings));
-    if (jsonStats.errors.length === 0 && jsonStats.warnings.length === 0) gutil.log(chalk.green(`[${task}]`), stats.toString());
-    if (task === TASK_SERVER) nodemon.restart();
+const webpackStats = (err, stats, taskEnv) => {
+  if (err) throw new gutil.PluginError('webpack', err);
+  const jsonStats = stats.toJson();
+  if (jsonStats.errors.length > 0) gutil.log(chalk.red(jsonStats.errors));
+  if (jsonStats.warnings.length > 0) gutil.log(chalk.yellow(jsonStats.warnings));
+  if (jsonStats.errors.length === 0 && jsonStats.warnings.length === 0) gutil.log(chalk.green(`[${taskEnv}]`), stats.toString());
+};
 
+const webpackBuild = (config, taskEnv, done) => {
+  compiler(config, taskEnv).run((err, stats) => {
+    webpackStats(err, stats, taskEnv);
+    done();
+  });
+};
+
+const webpackWatch = (config, taskEnv, done) => {
+  let firedDone = false;
+  compiler(config, taskEnv).watch({
+    aggregateTimeout: 300,
+  }, (err, stats) => {
+    webpackStats(err, stats, taskEnv);
+    if (env === SERVER) nodemon.restart();
     if (!firedDone) {
       firedDone = true;
       done();
     }
-  };
-
-  compiler.watch({
-    aggregateTimeout: 300,
-  }, cb);
+  });
 };
 
+const __PROD__ = process.env.NODE_ENV === 'production';
 const nodemonOpts = { execMap: { js: 'node' }, ignore: ['*'], watch: ['foo/'], ext: 'noop' };
-const startServer = () => {
-  const script = path.join(samBellRoot, SERVER_OUTPUT_DIR, SERVER_FILENAME);
+const startDevServer = () => {
+  const script = `${cwd}/${SERVER_OUTPUT_DIR}/${SERVER_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
   nodemon({ ...nodemonOpts, script }).on('restart', () => {
     console.log(chalk.magenta('Restart server...'));
   });
 };
 
-gulp.task(TASK_CLIENT, done => webpackWatch(webpackClientConfig, TASK_CLIENT, done));
-gulp.task(TASK_SERVER, done => webpackWatch(webpackServerConfig, TASK_SERVER, done));
-gulp.task(TASK_DEFAULT, [TASK_CLIENT, TASK_SERVER], startServer);
+gulp.task(TASK_CLIENT_RUN, done => webpackWatch(webpackClientConfig(), CLIENT, done));
+gulp.task(TASK_SERVER_RUN, done => webpackWatch(webpackServerConfig(), SERVER, done));
+gulp.task(TASK_DEFAULT, [TASK_CLIENT_RUN, TASK_SERVER_RUN], startDevServer);
+
+gulp.task(TASK_CLIENT_BUILD, done => webpackBuild(webpackClientConfig(), CLIENT, done));
+gulp.task(TASK_SERVER_BUILD, done => webpackBuild(webpackServerConfig(), SERVER, done));
+gulp.task(TASK_BUILD, [TASK_CLIENT_BUILD, TASK_SERVER_BUILD]);

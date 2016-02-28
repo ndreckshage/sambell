@@ -2,10 +2,8 @@ import 'babel-polyfill';
 import 'isomorphic-fetch';
 
 import chalk from 'chalk';
-import path from 'path';
 import React, { createElement } from 'react';
 import express from 'express';
-import { CLIENT_OUTPUT_DIR, CLIENT_PUBLIC_MOUNT, CLIENT_FILENAME } from './../webpack/constants';
 import { match, RouterContext } from 'react-router';
 import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
@@ -14,17 +12,23 @@ import { combineReducers as loopCombineReducers } from 'redux-loop';
 import createStore from './createStore';
 import { universal, server, client } from './gerty';
 
-const entry = require(__GERTY_ENTRY__).default;
+import {
+  CLIENT_OUTPUT_DIR, CLIENT_PUBLIC_MOUNT,
+  CLIENT_FILENAME, MINIFIED, JS_EXT, CSS_EXT, CSS_FILENAME,
+} from './../webpack/constants';
 
-const clientOutputDir = path.join(__dirname, '..', '..', CLIENT_OUTPUT_DIR);
+const entry = require(__GERTY_ENTRY__).default;
+const script = `${CLIENT_PUBLIC_MOUNT}/${CLIENT_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
+const css = __PROD__ ? `<link href="${CLIENT_PUBLIC_MOUNT}${CSS_FILENAME}${MINIFIED}${CSS_EXT}"></link>` : '';
 
 const getHtml = (html = '', scriptString = '') => {
   const { mount } = universal;
   const { render: enableClientRender } = client;
+
   return (
     `<!DOCTYPE html>
     <html>
-      <head>${enableClientRender ? `<script src="${CLIENT_PUBLIC_MOUNT}/${CLIENT_FILENAME}" async></script>` : ''}</head>
+      <head>${css}${enableClientRender ? `<script src="${script}" async></script>` : ''}</head>
       <body><div id="${mount}">${html}</div>${scriptString}</body>
     </html>`
   );
@@ -113,7 +117,7 @@ const createServer = () => {
   if (enableServerRender) finalRender = render;
 
   const app = express();
-  app.use(CLIENT_PUBLIC_MOUNT, express.static(clientOutputDir));
+  app.use(CLIENT_PUBLIC_MOUNT, express.static(CLIENT_OUTPUT_DIR));
   app.get('*', finalRender);
   app.listen(port, () => {
     console.log(chalk.cyan(`Server listening on port ${port}`)); // eslint-disable-line
