@@ -40,8 +40,7 @@ const installDocker = () => {
   copy('Dockerfile', path.join(cwd, 'Dockerfile'));
   copy('docker-compose.yml', path.join(cwd, 'docker-compose.yml'));
   copy('dockerignore', path.join(cwd, '.dockerignore'));
-  spawn('docker-compose', ['build'], { stdio: 'inherit' });
-  return console.log(chalk.green(`Docker installed.`));
+  return console.log(chalk.green(`Docker installed --> docker-compose build`));
 };
 
 const installEslint = () => {
@@ -77,10 +76,10 @@ const installGit = () => {
 };
 
 export default argv => {
-  const { local, git, eslint, docker } = argv;
+  const { all, local, git, eslint, docker } = argv;
 
-  if (local) installLocal();
-  if (git) installGit();
-  if (eslint) installEslint();
-  if (docker) installDocker();
+  if (all || local) installLocal();
+  if (all || git) installGit();
+  if (all || eslint) installEslint();
+  if (all || docker) installDocker();
 };
