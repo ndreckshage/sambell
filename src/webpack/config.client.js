@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 import path from 'path';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import { loaders, devtool } from './shared';
@@ -11,6 +12,15 @@ const outputPath = path.join(process.cwd(), CLIENT_OUTPUT_DIR);
 
 export default () => {
   const __PROD__ = process.env.NODE_ENV === 'production';
+
+  let prod = [];
+  if (__PROD__) {
+    prod = [
+      new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.UglifyJsPlugin(),
+      new webpack.optimize.AggressiveMergingPlugin(),
+    ];
+  }
 
   return {
     entry,
@@ -26,6 +36,7 @@ export default () => {
     },
     plugins: [
       new ExtractTextPlugin(`${CSS_FILENAME}${__PROD__ ? MINIFIED : ''}${CSS_EXT}`),
+      ...prod,
     ],
     output: {
       path: outputPath,
