@@ -110,7 +110,7 @@ const webpackWatch = (config, taskEnv, done) => {
     aggregateTimeout: 300,
   }, (err, stats) => {
     webpackStats(err, stats, taskEnv);
-    if (env === SERVER) nodemon.restart();
+    if (taskEnv === SERVER) nodemon.restart();
     if (!firedDone) {
       firedDone = true;
       done();
