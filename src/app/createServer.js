@@ -24,15 +24,15 @@ const css = `<link rel="stylesheet" type="text/css" href="${CLIENT_PUBLIC_MOUNT}
 const getHtml = (html = '', scriptString = '') => {
   const { mount } = universal;
   const { render: enableClientRender } = client;
-  const { additionalHead, styleReset: _styleReset } = server;
+  const { prependHead, appendHead, styleReset: _styleReset, prependBody, appendBody } = server;
   const styleReset = _styleReset ? `<style>${_styleReset}</style>` : '';
   const js = enableClientRender ? `<script src="${script}" async></script>` : '';
 
   return (
     `<!DOCTYPE html>
     <html>
-      <head>${styleReset}${css}${js}${additionalHead}</head>
-      <body><div id="${mount}">${html}</div>${scriptString}</body>
+      <head>${prependHead}${styleReset}${css}${js}${appendHead}</head>
+      <body>${prependBody}<div id="${mount}">${html}</div>${scriptString}${appendBody}</body>
     </html>`
   );
 };

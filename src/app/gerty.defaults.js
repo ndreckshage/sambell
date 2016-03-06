@@ -19,8 +19,11 @@ const styleReset = `
 export const server = {
   render: true,
   port: 3000 || process.env.PORT,
-  additionalHead: '',
+  prependHead: '',
+  appendHead: '',
   styleReset,
+  prependBody: '',
+  appendBody: '',
 };
 
 export const universal = {

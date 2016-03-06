@@ -63,11 +63,11 @@ let cliAppOptions = {
   __GERTY_PATH__: JSON.stringify(gertyPath),
 };
 
-const compiler = (config, task) => {
+const compiler = (config, taskEnv) => {
   cliAppOptions = {
     ...cliAppOptions,
-    __CLIENT__: JSON.stringify(task === TASK_CLIENT_RUN),
-    __SERVER__: JSON.stringify(task === TASK_SERVER_RUN),
+    __CLIENT__: JSON.stringify(taskEnv === CLIENT),
+    __SERVER__: JSON.stringify(taskEnv === SERVER),
   };
 
   return webpack({
