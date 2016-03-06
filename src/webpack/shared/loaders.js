@@ -20,8 +20,8 @@ const jsonLoader = {
 };
 
 const cssLoader = {
-  test: /\.scss$/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[local]--[hash:base64:5]!autoprefixer-loader!sass-loader'),
+  test: /\.css$/,
+  loader: ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[local]--[hash:base64:5]!postcss-loader'),
 };
 
 const imagesLoader = {

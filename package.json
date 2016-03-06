@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "eslint-plugin-react": "^3.16.1"
   },
   "dependencies": {
-    "autoprefixer-loader": "^3.2.0",
+    "autoprefixer": "^6.3.3",
     "babel-cli": "^6.5.1",
     "babel-eslint": "^4.1.8",
     "babel-loader": "^6.2.2",
@@ -43,8 +43,9 @@
     "json-loader": "^0.5.4",
     "lodash": "^4.3.0",
     "minimist": "^1.2.0",
-    "node-sass": "^3.4.2",
     "nodemon": "^1.8.1",
+    "postcss-loader": "^0.8.1",
+    "precss": "^1.4.0",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.0",
@@ -53,7 +54,6 @@
     "redux": "^3.3.1",
     "redux-loop": "^1.0.4",
     "redux-thunk": "^1.0.3",
-    "sass-loader": "^3.1.2",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.13"

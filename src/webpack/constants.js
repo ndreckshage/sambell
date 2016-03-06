@@ -4,7 +4,7 @@ export const APP_DIR = `${BUILD_DIR}/app`;
 export const CLIENT_OUTPUT_DIR = `${BUILD_DIR}/public`;
 export const SERVER_OUTPUT_DIR = `${BUILD_DIR}/dist`;
 
-export const CLIENT_PUBLIC_MOUNT = '/public';
+export const CLIENT_PUBLIC_MOUNT = '/public/';
 export const CLIENT_ENTRY = 'createClient';
 export const CLIENT_FILENAME = 'client';
 

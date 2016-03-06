@@ -18,8 +18,8 @@ import {
 } from './../webpack/constants';
 
 const entry = require(__GERTY_ENTRY__).default;
-const script = `${CLIENT_PUBLIC_MOUNT}/${CLIENT_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
-const css = `<link rel="stylesheet" type="text/css" href="${CLIENT_PUBLIC_MOUNT}/${CSS_FILENAME}${__PROD__ ? MINIFIED : ''}${CSS_EXT}"></link>`;
+const script = `${CLIENT_PUBLIC_MOUNT}${CLIENT_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
+const css = `<link rel="stylesheet" type="text/css" href="${CLIENT_PUBLIC_MOUNT}${CSS_FILENAME}${__PROD__ ? MINIFIED : ''}${CSS_EXT}"></link>`;
 
 const getHtml = (html = '', scriptString = '') => {
   const { mount } = universal;
