@@ -11,8 +11,8 @@ const cwd = process.cwd();
 
 const dependencies = [
   'babel-polyfill', 'chalk', 'domready', 'express',
-  'ground-control', 'isomorphic-fetch', 'lodash', 'react',
-  'react-dom', 'react-redux', 'react-router', 'react-router-redux',
+  'ground-control', 'isomorphic-fetch', 'lodash', 'react', 'react-dom',
+  'react-helmet', 'react-redux', 'react-router', 'react-router-redux',
   'redux', 'redux-loop', 'redux-thunk', 'source-map-support',
 ];
 

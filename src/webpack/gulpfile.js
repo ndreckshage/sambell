@@ -12,8 +12,10 @@ import fs from 'fs';
 import webpackClientConfig from './config.client';
 import webpackServerConfig from './config.server';
 
-import autoprefixer from 'autoprefixer';
-import precss from 'precss';
+import postCssAutoprefixer from 'autoprefixer';
+import postCssPxtorem from 'postcss-pxtorem';
+import postCssVars from 'postcss-simple-vars';
+import postCssImport from 'postcss-import';
 
 import { setConstants } from './shared';
 import { SERVER_OUTPUT_DIR, SERVER_FILENAME, APP_DIR, JS_EXT, MINIFIED } from './constants';
@@ -83,8 +85,10 @@ const compiler = (config, taskEnv) => {
       new webpack.DefinePlugin(cliAppOptions),
     ],
     postcss: () => [
-      autoprefixer,
-      precss,
+      postCssImport({ path: [cwd], addDependencyTo: webpack }),
+      postCssVars,
+      postCssPxtorem,
+      postCssAutoprefixer,
     ],
   });
 };

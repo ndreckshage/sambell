@@ -11,6 +11,7 @@ import GroundControl, { loadStateOnServer } from 'ground-control';
 import { combineReducers as loopCombineReducers } from 'redux-loop';
 import createStore from './createStore';
 import { universal, server, client } from './gerty';
+import Helmet from 'react-helmet';
 
 import {
   CLIENT_OUTPUT_DIR, CLIENT_PUBLIC_MOUNT,
@@ -24,14 +25,26 @@ const css = `<link rel="stylesheet" type="text/css" href="${CLIENT_PUBLIC_MOUNT}
 const getHtml = (html = '', scriptString = '') => {
   const { mount } = universal;
   const { render: enableClientRender } = client;
-  const { prependHead, appendHead, styleReset: _styleReset, prependBody, appendBody } = server;
-  const styleReset = _styleReset ? `<style>${_styleReset}</style>` : '';
+  const { prependHead, appendHead, styleReset: _styleReset, appendStyleReset, prependBody, appendBody } = server;
+  const styleReset = _styleReset ? `<style>${_styleReset}${appendStyleReset}</style>` : '';
   const js = enableClientRender ? `<script src="${script}" async></script>` : '';
+  const helmet = Helmet.rewind();
 
   return (
     `<!DOCTYPE html>
     <html>
-      <head>${prependHead}${styleReset}${css}${js}${appendHead}</head>
+      <head>
+        ${prependHead}
+        ${styleReset}
+        ${css}
+        ${js}
+        ${helmet.title.toString()}
+        ${helmet.base.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}
+        ${helmet.script.toString()}
+        ${appendHead}
+      </head>
       <body>${prependBody}<div id="${mount}">${html}</div>${scriptString}${appendBody}</body>
     </html>`
   );

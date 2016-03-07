@@ -22,6 +22,7 @@ export const server = {
   prependHead: '',
   appendHead: '',
   styleReset,
+  appendStyleReset: '',
   prependBody: '',
   appendBody: '',
 };
