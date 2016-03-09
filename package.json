@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "chalk": "^1.1.1",
     "domready": "^1.0.8",
     "express": "^4.13.4",
-    "ground-control": "^0.4.2",
+    "ground-control": "^0.5.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.3.0",
     "react": "^0.14.7",
