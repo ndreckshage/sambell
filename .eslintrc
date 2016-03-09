@@ -7,6 +7,7 @@
     "new-cap": 0
   },
   "globals": {
+    "__OUTPUT_BASE__": true,
     "__GERTY_ENV__": true,
     "__GERTY_ENTRY__": true,
     "__GERTY_PATH__": true,

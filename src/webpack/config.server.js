@@ -12,9 +12,9 @@ const bannerPlugin = new webpack.BannerPlugin('require("source-map-support").ins
 
 const externals = findExternals();
 const entry = path.join(__dirname, '..', '..', APP_DIR, SERVER_ENTRY);
-const outputPath = path.join(process.cwd(), SERVER_OUTPUT_DIR);
 
-export default () => {
+export default (outputBase) => {
+  const outputPath = path.join(outputBase, SERVER_OUTPUT_DIR);
   const __PROD__ = process.env.NODE_ENV === 'production';
 
   return {

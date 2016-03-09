@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -19,6 +19,25 @@
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^5.0.1",
     "eslint-plugin-react": "^3.16.1"
+  },
+  "peerDependencies": {
+    "babel-polyfill": "^6.5.0",
+    "chalk": "^1.1.1",
+    "domready": "^1.0.8",
+    "express": "^4.13.4",
+    "ground-control": "^0.4.2",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.3.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-helmet": "^2.3.1",
+    "react-redux": "^4.4.0",
+    "react-router": "^2.0.0",
+    "react-router-redux": "^3.0.0",
+    "redux": "^3.3.1",
+    "redux-loop": "^1.0.4",
+    "redux-thunk": "^1.0.3",
+    "source-map-support": "^0.4.0"
   },
   "dependencies": {
     "autoprefixer": "^6.3.3",
@@ -56,7 +75,7 @@
     "react-router": "^2.0.0",
     "react-router-redux": "^3.0.0",
     "redux": "^3.3.1",
-    "redux-loop": "^1.0.4",
+    "redux-loop": "^1.1.0",
     "redux-thunk": "^1.0.3",
     "source-map-support": "^0.4.0",
     "style-loader": "^0.13.0",

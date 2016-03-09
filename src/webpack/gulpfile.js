@@ -4,6 +4,7 @@ import gulp from 'gulp';
 import webpack from 'webpack';
 import nodemon from 'nodemon';
 import minimist from 'minimist';
+import { reduce } from 'lodash';
 import path from 'path';
 import chalk from 'chalk';
 import gutil from 'gutil';
@@ -18,7 +19,11 @@ import postCssVars from 'postcss-simple-vars';
 import postCssImport from 'postcss-import';
 
 import { setConstants } from './shared';
-import { SERVER_OUTPUT_DIR, SERVER_FILENAME, APP_DIR, JS_EXT, MINIFIED } from './constants';
+import {
+  SERVER_OUTPUT_DIR, SERVER_FILENAME,
+  BUILD_DIR, APP_DIR,
+  JS_EXT, MINIFIED,
+} from './constants';
 
 const CLIENT = 'client';
 const SERVER = 'server';
@@ -35,8 +40,24 @@ const { env, cwd, entry, gerty } = argv;
 
 const samBellRoot = path.join(__dirname, '..', '..');
 const samBellModules = path.join(samBellRoot, 'node_modules');
-const samBellBuild = path.join(samBellRoot, 'build');
-const samBellApp = path.join(samBellBuild, APP_DIR);
+const samBellBuild = path.join(samBellRoot, BUILD_DIR);
+const samBellApp = path.join(samBellRoot, APP_DIR);
+
+// if we match peerDeps, assume local
+const useLocal = () => {
+  const rootPJ = require(path.join(samBellRoot, 'package.json'));
+  try {
+    const appPJ = require(path.join(cwd, 'package.json'));
+    reduce(rootPJ.peerDependencies, (res, v, k) => {
+      return !!appPJ.dependencies[k] && res;
+    }, true);
+  } catch (e) {
+    return false;
+  }
+};
+
+const local = useLocal();
+const outputBase = local ? process.cwd() : samBellRoot;
 
 switch (env) {
   case 'd':
@@ -63,6 +84,7 @@ let cliAppOptions = {
   __GERTY_ENV__: JSON.stringify(env),
   __GERTY_ENTRY__: JSON.stringify(entry),
   __GERTY_PATH__: JSON.stringify(gertyPath),
+  __OUTPUT_BASE__: JSON.stringify(outputBase),
 };
 
 const compiler = (config, taskEnv) => {
@@ -125,16 +147,16 @@ const webpackWatch = (config, taskEnv, done) => {
 const __PROD__ = process.env.NODE_ENV === 'production';
 const nodemonOpts = { execMap: { js: 'node' }, ignore: ['*'], watch: ['foo/'], ext: 'noop' };
 const startDevServer = () => {
-  const script = `${cwd}/${SERVER_OUTPUT_DIR}/${SERVER_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
+  const script = `${outputBase}/${SERVER_OUTPUT_DIR}/${SERVER_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
   nodemon({ ...nodemonOpts, script }).on('restart', () => {
     console.log(chalk.magenta('Restart server...'));
   });
 };
 
-gulp.task(TASK_CLIENT_RUN, done => webpackWatch(webpackClientConfig(), CLIENT, done));
-gulp.task(TASK_SERVER_RUN, done => webpackWatch(webpackServerConfig(), SERVER, done));
+gulp.task(TASK_CLIENT_RUN, done => webpackWatch(webpackClientConfig(outputBase), CLIENT, done));
+gulp.task(TASK_SERVER_RUN, done => webpackWatch(webpackServerConfig(outputBase), SERVER, done));
 gulp.task(TASK_DEFAULT, [TASK_CLIENT_RUN, TASK_SERVER_RUN], startDevServer);
 
-gulp.task(TASK_CLIENT_BUILD, done => webpackBuild(webpackClientConfig(), CLIENT, done));
-gulp.task(TASK_SERVER_BUILD, done => webpackBuild(webpackServerConfig(), SERVER, done));
+gulp.task(TASK_CLIENT_BUILD, done => webpackBuild(webpackClientConfig(outputBase), CLIENT, done));
+gulp.task(TASK_SERVER_BUILD, done => webpackBuild(webpackServerConfig(outputBase), SERVER, done));
 gulp.task(TASK_BUILD, [TASK_CLIENT_BUILD, TASK_SERVER_BUILD]);

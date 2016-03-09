@@ -1,6 +1,9 @@
 import 'babel-polyfill';
 import 'isomorphic-fetch';
 
+import path from 'path';
+import fs from 'fs';
+
 import chalk from 'chalk';
 import React, { createElement } from 'react';
 import express from 'express';
@@ -15,19 +18,35 @@ import Helmet from 'react-helmet';
 
 import {
   CLIENT_OUTPUT_DIR, CLIENT_PUBLIC_MOUNT,
-  CLIENT_FILENAME, MINIFIED, JS_EXT, CSS_EXT, CSS_FILENAME,
+  CLIENT_FILENAME, MINIFIED, JS_EXT,
+  CSS_EXT, CSS_FILENAME,
 } from './../webpack/constants';
 
 const entry = require(__GERTY_ENTRY__).default;
-const script = `${CLIENT_PUBLIC_MOUNT}${CLIENT_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
-const css = `<link rel="stylesheet" type="text/css" href="${CLIENT_PUBLIC_MOUNT}${CSS_FILENAME}${__PROD__ ? MINIFIED : ''}${CSS_EXT}"></link>`;
+
+const jsFilename = `${CLIENT_FILENAME}${__PROD__ ? MINIFIED : ''}${JS_EXT}`;
+const cssFilename = `${CSS_FILENAME}${__PROD__ ? MINIFIED : ''}${CSS_EXT}`;
+let jsExists = false;
+let cssExists = false;
+
+try {
+  fs.accessSync(path.join(__OUTPUT_BASE__, CLIENT_OUTPUT_DIR, jsFilename), fs.R_OK);
+  jsExists = true;
+} catch (e) {} // eslint-disable-line
+
+try {
+  fs.accessSync(path.join(__OUTPUT_BASE__, CLIENT_OUTPUT_DIR, cssFilename), fs.R_OK);
+  cssExists = true;
+} catch (e) {} // eslint-disable-line
+
 
 const getHtml = (html = '', scriptString = '') => {
   const { mount } = universal;
   const { render: enableClientRender } = client;
   const { prependHead, appendHead, styleReset: _styleReset, appendStyleReset, prependBody, appendBody } = server;
   const styleReset = _styleReset ? `<style>${_styleReset}${appendStyleReset}</style>` : '';
-  const js = enableClientRender ? `<script src="${script}" async></script>` : '';
+  const js = enableClientRender && jsExists ? `<script src="${CLIENT_PUBLIC_MOUNT}${jsFilename}" async></script>` : '';
+  const css = cssExists ? `<link rel="stylesheet" type="text/css" href="${CLIENT_PUBLIC_MOUNT}${cssFilename}"></link>` : '';
   const helmet = Helmet.rewind();
 
   return (
@@ -45,7 +64,12 @@ const getHtml = (html = '', scriptString = '') => {
         ${helmet.script.toString()}
         ${appendHead}
       </head>
-      <body>${prependBody}<div id="${mount}">${html}</div>${scriptString}${appendBody}</body>
+      <body>
+        ${prependBody}
+        <div id="${mount}">${html}</div>
+        ${scriptString}
+        ${appendBody}
+      </body>
     </html>`
   );
 };
@@ -133,7 +157,7 @@ const createServer = () => {
   if (enableServerRender) finalRender = render;
 
   const app = express();
-  app.use(CLIENT_PUBLIC_MOUNT, express.static(CLIENT_OUTPUT_DIR));
+  app.use(CLIENT_PUBLIC_MOUNT, express.static(path.join(__OUTPUT_BASE__, CLIENT_OUTPUT_DIR)));
   app.get('*', finalRender);
   app.listen(port, () => {
     console.log(chalk.cyan(`Server listening on port ${port}`)); // eslint-disable-line

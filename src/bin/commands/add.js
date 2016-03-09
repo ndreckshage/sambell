@@ -5,23 +5,19 @@ import chalk from 'chalk';
 import fs from 'fs';
 import copy from './lib/copy';
 import { spawn } from 'child_process';
+import { reduce } from 'lodash';
 import packageJson from './../../../package.json';
 
 const cwd = process.cwd();
 
-const dependencies = [
-  'babel-polyfill', 'chalk', 'domready', 'express',
-  'ground-control', 'isomorphic-fetch', 'lodash', 'react', 'react-dom',
-  'react-helmet', 'react-redux', 'react-router', 'react-router-redux',
-  'redux', 'redux-loop', 'redux-thunk', 'source-map-support',
+export const packages = [
+  `sambell@${packageJson.version}`,
+  ...reduce(packageJson.peerDependencies, (result, v, k) => {
+    return [...result, `${k}@${v}`];
+  }, []),
 ];
 
 const installLocal = () => {
-  const packages = [
-    `sambell@${packageJson.version}`,
-    ...dependencies.map(dep => `${dep}@${packageJson.dependencies[dep]}`),
-  ];
-
   spawn('npm', ['i', '--save', ...packages], { stdio: 'inherit' });
 };
 

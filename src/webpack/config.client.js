@@ -8,9 +8,9 @@ import {
 } from './constants';
 
 const entry = path.join(__dirname, '..', '..', APP_DIR, CLIENT_ENTRY);
-const outputPath = path.join(process.cwd(), CLIENT_OUTPUT_DIR);
 
-export default () => {
+export default (outputBase) => {
+  const outputPath = path.join(outputBase, CLIENT_OUTPUT_DIR);
   const __PROD__ = process.env.NODE_ENV === 'production';
 
   let prod = [];
