@@ -11,6 +11,7 @@
     "__GERTY_ENV__": true,
     "__GERTY_ENTRY__": true,
     "__GERTY_PATH__": true,
+    "__SAMBELL_LOCAL__": true,
     "__DEV__": true,
     "__PROD__": true,
     "__CLIENT__": true,

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import {
   universal as universalDefaults,
   client as clientDefaults,
@@ -16,11 +18,12 @@ if (__GERTY_PATH__) {
   clientOptions = gertyOptions.client;
   serverOptions = gertyOptions.server;
   envOptions = gertyOptions.env;
-} else {
-  if (__DEV__) {
-    console.warn('No gerty.js your application. Add gerty (sambell add --gerty) to customize your app!'); // eslint-disable-line
-  }
-} // eslint-disable-line
+}
+
+if (__DEV__) {
+  if (!__GERTY_PATH__) console.warn('No gerty.js your application. Add gerty (sambell add --gerty) to customize your app!');
+  if (!__SAMBELL_LOCAL__) console.warn('Running sambell from global NPM. Run sambell add --local run locally!');
+}
 
 export const universal = { ...universalDefaults, ...universalOptions };
 export const client = { ...clientDefaults, ...clientOptions };

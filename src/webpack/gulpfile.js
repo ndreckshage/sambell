@@ -85,6 +85,7 @@ let cliAppOptions = {
   __GERTY_ENTRY__: JSON.stringify(entry),
   __GERTY_PATH__: JSON.stringify(gertyPath),
   __OUTPUT_BASE__: JSON.stringify(outputBase),
+  __SAMBELL_LOCAL__: JSON.stringify(local),
 };
 
 const compiler = (config, taskEnv) => {
