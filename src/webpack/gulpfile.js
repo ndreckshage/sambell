@@ -48,7 +48,7 @@ const useLocal = () => {
   const rootPJ = require(path.join(samBellRoot, 'package.json'));
   try {
     const appPJ = require(path.join(cwd, 'package.json'));
-    reduce(rootPJ.peerDependencies, (res, v, k) => {
+    return reduce(rootPJ.peerDependencies, (res, v, k) => {
       return !!appPJ.dependencies[k] && res;
     }, true);
   } catch (e) {
