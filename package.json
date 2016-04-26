@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
@@ -35,8 +35,8 @@
     "react-router": "^2.3.0",
     "react-router-redux": "^4.0.0",
     "redux": "^3.3.1",
-    "redux-loop": "^1.0.4",
-    "redux-thunk": "^1.0.3",
+    "redux-loop": "^2.1.1",
+    "redux-thunk": "^2.0.1",
     "source-map-support": "^0.4.0"
   },
   "dependencies": {
@@ -69,6 +69,7 @@
     "postcss-simple-vars": "^1.2.0",
     "precss": "^1.4.0",
     "react": "^15.0.1",
+    "react-dom": "^15.0.1",
     "react-helmet": "^3.1.0",
     "react-redux": "^4.4.0",
     "react-router": "^2.3.0",
