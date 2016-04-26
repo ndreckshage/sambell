@@ -6,6 +6,7 @@ import { Router, browserHistory, hashHistory } from 'react-router';
 import GroundControl from 'ground-control';
 import createStore from './createStore';
 import { Provider } from 'react-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
 import { combineReducers as loopCombineReducers } from 'redux-loop';
 import domready from 'domready';
 import { universal, client } from './gerty';
@@ -17,6 +18,7 @@ const createClient = () => {
     mount, redux: enableRedux,
     reactRouter: enableReactRouter,
     groundControl: enableGroundControl,
+    reactRouterRedux: enableReactRouterRedux,
     reduxLoop: enableReduxLoop,
   } = universal;
 
@@ -27,9 +29,13 @@ const createClient = () => {
   domready(() => {
     let store, reducers; // eslint-disable-line
     if (enableRedux) {
-      const storeAndReducers = createStore(universal, history);
+      const storeAndReducers = createStore(universal);
       reducers = storeAndReducers.reducers;
       store = storeAndReducers.store;
+
+      if (enableReactRouterRedux) {
+        history = syncHistoryWithStore(history, store);
+      }
     }
 
     let container;

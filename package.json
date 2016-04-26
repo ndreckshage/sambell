@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "create a universal, single page app with a single file",
   "main": "build/app/index.js",
   "scripts": {
