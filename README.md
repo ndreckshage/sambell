@@ -1,4 +1,4 @@
-sambell 2.0.0
+sambell 2.0.0-beta.2
 create universal react apps w minimal configuration
 
 `yarn global add sambell`
