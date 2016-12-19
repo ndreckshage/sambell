@@ -28,10 +28,12 @@ features:
 todo:
 - [x] polyfills (isomorphic-fetch etc)
 - [ ] eslint (airbnb)
-- [ ] examples (below)
+- [x] react-router example
+- [ ] react-router-auth0 example
+- [ ] react-router-auth0-apollo example
 
 examples:
-- 1 sambell-w-react-router
+- 1 sambell-w-react-router https://github.com/HumbleSpark/sambell-w-react-router
 - 2 sambell-w-react-router-auth0
 - 3 sambell-w-react-router-auth0-apollo
 
