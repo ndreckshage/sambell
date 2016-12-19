@@ -37,7 +37,8 @@ examples:
 - 2 sambell-w-react-router-auth0
 - 3 sambell-w-react-router-auth0-apollo
 
-* webpack.overrides.js
+
+\**webpack.overrides.js*
 ```
 module.exports = (config) => {
   config.devtool = 'eval';
