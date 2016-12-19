@@ -1,46 +1,29 @@
-**IMPORTANT!** This a beta! Use cautiously until we release 1.0
+sambell 2.0.0
+create universal react apps w minimal configuration
 
-# Create a universal, single page app with 1 file.
+`yarn global add sambell`
+`sambell new my-app`
+`yarn start`
 
-- Quickly prototype. Focus on app code, not initial setup.
-- No eslintrc, babelrc, package.json, node_modules, webpack setup. All behind the scenes!
-- Not a 'starter kit', where you are thrown into a semi-big project right off the bat.
-- Start with 1 file, and incrementally add complexity.
-- [Example!](https://github.com/ndreckshage/sambell-example)
+- similar to create-react-app, but universal & configurable
+- similar to next.js, but less opinionated
+- came first! commit history proof :P
 
-## Install
-```
-npm i -g sambell
-```
+both create-react-app and next.js are great projects, try them. i wanted a few things i didn't get with those: universal app with react router support, css modules, critical styles.
 
-## Step 1 (1 file)
-```
-sambell new app.js
-sambell run app.js
-```
+features:
+- webpack 2 (tree shaking, code splitting, etc)
+- server side rendering
+- critical styles with `react-ssr-critical-styles`
+- babel (es2015, stage-1, react)
+- loaders (css, style (with isomorphic support), image)
 
-And you have a universal, single page app! **1 FILE!**
+todo:
+[ ] eslint (airbnb)
+[ ] polyfills (isomorphic-fetch etc)
+[ ] examples (below)
 
-## Step 2 (Basic structure)
-```
-sambell wrap app.js
-```
-
-And you have a basic project structure with a package.json, gerty.js (to configure sambell).
-
-## Step 3 (Add more with a few flags / whatever you want)
-```
-sambell add --local --eslint --git
-npm i --save immutable
-```
-
-## What you get!
-- Server side rendering setup (src/app/createServer)
-- Client side rendering w/ data from server (src/app/createClient)
-- Redux store creation w/ a few enhancers (src/app/createStore)
-- Webpack setup for client & server code (src/webpack/gulpfile)
-- Babel with babel-preset-es2015; babel-preset-stage-0; babel-preset-react
-- Absolute path requires from your app root (```import routes from 'routes'```)
-- CLI with a few commands (new; run; wrap; add -- src/bin, better documentation coming)
-- Configurable with gerty.js! (src/app/gerty.defaults.js)
-- Everything behind the scenes, just focus on app code for a quick prototype!
+examples:
+- 1 sambell-w-react-router
+- 2 sambell-w-react-router-auth0
+- 3 sambell-w-react-router-auth0-apollo

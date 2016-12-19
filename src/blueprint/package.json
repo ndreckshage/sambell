@@ -1,8 +1,0 @@
-{
-  "scripts": {
-    "start": "npm run dev",
-    "build": "sambell build --env prod",
-    "dev": "sambell run --env dev",
-    "prod": "node build/dist/server-min.js"
-  }
-}

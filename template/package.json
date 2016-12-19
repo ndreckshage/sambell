@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.14.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-ssr-critical-styles": "^0.1.2",
+  },
+  "devDependencies": {
+    "sambell": "^2.0.0-beta.1"
+  },
+  "scripts": {
+    "start": "sambell run",
+    "build": "sambell build"
+  }
+}
