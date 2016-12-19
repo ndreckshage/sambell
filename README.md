@@ -1,4 +1,4 @@
-sambell 2.0.0-beta.2
+sambell 2.0.0-beta.3
 create universal react apps w minimal configuration
 
 ```
