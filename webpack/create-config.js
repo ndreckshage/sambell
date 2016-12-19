@@ -21,7 +21,13 @@ module.exports = (target = 'web', env = 'dev') => {
   const config = {
     target: target,
     context: path.resolve(process.cwd(), 'src'),
-    entry: { run: scope },
+    entry: {
+      run: [
+        require.resolve('babel-polyfill'),
+        require.resolve('isomorphic-fetch'),
+        scope,
+      ],
+    },
 
     output: {
       path: path.resolve(baseOutput(), scope),

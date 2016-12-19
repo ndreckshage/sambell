@@ -1,4 +1,4 @@
-#sambell 2.0.0-beta.3
+#sambell
 create universal react apps w minimal configuration
 
 ```
@@ -22,10 +22,11 @@ features:
 - critical styles with `react-ssr-critical-styles`
 - babel (es2015, stage-1, react)
 - loaders (css, style (with isomorphic support), image)
+- configurable! add `webpack.overrides.js` to your project root & add whatever loaders you want, etc.
 
 todo:
+- [x] polyfills (isomorphic-fetch etc)
 - [ ] eslint (airbnb)
-- [ ] polyfills (isomorphic-fetch etc)
 - [ ] examples (below)
 
 examples:
