@@ -19,9 +19,9 @@ features:
 - loaders (css, style (with isomorphic support), image)
 
 todo:
-[ ] eslint (airbnb)
-[ ] polyfills (isomorphic-fetch etc)
-[ ] examples (below)
+- [ ] eslint (airbnb)
+- [ ] polyfills (isomorphic-fetch etc)
+- [ ] examples (below)
 
 examples:
 - 1 sambell-w-react-router
