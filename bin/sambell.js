@@ -19,6 +19,7 @@ if (command === 'run') {
   const finalDest = path.resolve(process.cwd(), dest);
   ncp(path.resolve(__dirname, '..', 'template'), finalDest, function (err) {
    if (err) return console.error(err);
+   fs.renameSync(path.resolve(finalDest, '.npmignore'), path.resolve(finalDest, '.gitignore'));
    process.chdir(finalDest);
    spawn('yarn', ['install'], { stdio: 'inherit' });
   });
