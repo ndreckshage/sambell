@@ -22,7 +22,8 @@ features:
 - critical styles with `react-ssr-critical-styles`
 - babel (es2015, stage-1, react)
 - loaders (css, style (with isomorphic support), image)
-- configurable! add `webpack.overrides.js` to your project root & add whatever loaders you want, etc.
+- polyfills (babel, isomorphic-fetch)
+- configurable! add `webpack.overrides.js` to your project root & add whatever loaders you want, etc.*
 
 todo:
 - [x] polyfills (isomorphic-fetch etc)
@@ -33,3 +34,11 @@ examples:
 - 1 sambell-w-react-router
 - 2 sambell-w-react-router-auth0
 - 3 sambell-w-react-router-auth0-apollo
+
+* webpack.overrides.js
+```
+module.exports = (config) => {
+  config.devtool = 'eval';
+  return config;
+}
+```
