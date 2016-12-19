@@ -25,5 +25,15 @@
     "minimist": "^1.2.0",
     "ncp": "^2.0.0",
     "webpack": "2.2.0-rc.0"
-  }
+  },
+  "tags": [
+    "react",
+    "universal",
+    "starter-kit"
+  ],
+  "keywords": [
+    "react",
+    "universal",
+    "starter-kit"
+  ]
 }
