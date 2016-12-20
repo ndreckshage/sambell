@@ -98,6 +98,9 @@ module.exports = (target = 'web', env = 'dev') => {
           ],
         },
       ],
+
+      exprContextRegExp: /$^/,
+      exprContextCritical: false,
     },
 
     plugins: [
