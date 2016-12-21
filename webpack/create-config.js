@@ -20,7 +20,7 @@ module.exports = (target = 'web', env = 'dev') => {
 
   const config = {
     target: target,
-    context: path.resolve(process.cwd(), 'src'),
+    context: process.cwd(),
     entry: {
       run: [
         require.resolve('babel-polyfill'),
@@ -38,8 +38,8 @@ module.exports = (target = 'web', env = 'dev') => {
 
     resolve: {
       modules: [
-        path.resolve(process.cwd(), 'node_modules'),
-        path.resolve(process.cwd(), 'src'),
+        'node_modules',
+        'src',
       ],
     },
 
@@ -113,10 +113,14 @@ module.exports = (target = 'web', env = 'dev') => {
       IS_PROD ? new webpack.optimize.AggressiveMergingPlugin() : null,
     ].filter(a => a),
 
-    externals: IS_NODE ? require('./node-externals')() : [],
     performance: { hints: false },
-    devtool: 'source-map',
+    devtool: IS_NODE || IS_DEV ? 'eval-source-map' : 'source-map',
   };
+
+  if (IS_NODE) {
+    config.externals = require('./node-externals')();
+    config.node = { console: true, __filename: true, __dirname: true };
+  }
 
   let overrides = c => c;
   try {

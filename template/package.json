@@ -6,7 +6,7 @@
     "react-ssr-critical-styles": "^0.1.2"
   },
   "devDependencies": {
-    "sambell": "^2.0.0-beta.5"
+    "sambell": "^2.0.0-beta.6"
   },
   "scripts": {
     "start": "sambell run",
