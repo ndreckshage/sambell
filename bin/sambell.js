@@ -5,6 +5,7 @@ const fs = require('fs');
 const ncp = require('ncp').ncp;
 const chalk = require('chalk');
 const { _: [command] } = argv;
+const packageJson = require('./../package.json');
 
 const spawn = require('child_process').spawn;
 const path = require('path');
@@ -19,10 +20,14 @@ if (command === 'run') {
   const finalDest = path.resolve(process.cwd(), dest);
   ncp(path.resolve(__dirname, '..', 'template'), finalDest, function (err) {
    if (err) return console.error(err);
-   fs.renameSync(path.resolve(finalDest, '.npmignore'), path.resolve(finalDest, '.gitignore'));
+   try {
+     fs.renameSync(path.resolve(finalDest, '.npmignore'), path.resolve(finalDest, '.gitignore'));
+   } catch (e) {} // if no .npmignore, already .gitignore
    process.chdir(finalDest);
    spawn('yarn', ['install'], { stdio: 'inherit' });
   });
+} else if (!command && (argv.v || argv.version)) {
+  console.log(chalk.cyan(`sambell ${packageJson.version}`));
 } else {
   console.log(chalk.red('Valid commands: run; build; new'));
 }
