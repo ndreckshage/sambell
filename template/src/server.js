@@ -19,4 +19,4 @@ server.get('*', (req, res) => {
   res.status(200).send(template(process.env.SAMBELL_CLIENT_ENTRY, content, stringifyStyles(criticalStyles)));
 });
 
-server.listen(3000);
+server.listen(process.env.SAMBELL_SERVER_PORT);
