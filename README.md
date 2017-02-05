@@ -26,6 +26,7 @@ features:
 - configurable! add `webpack.overrides.js` to your project root & add whatever loaders you want, etc.*
 
 next:
+- [ ] remove sambell env variables. would like to `@import { clientEntry } from 'sambell'` etc
 - [ ] eslint (airbnb)
 - [ ] gerty.config.js instead of webpack overrides
 - [ ] hot module replacement / auto reload
