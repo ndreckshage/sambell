@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 const baseOutput = () => {
   if (process.env.SAMBELL_SCRIPT === 'run') return path.resolve(__dirname, '..', 'build');
@@ -39,7 +40,7 @@ module.exports = (target = 'web', env = 'dev') => {
     resolve: {
       modules: [
         'node_modules',
-        'src',
+        process.cwd(),
       ],
     },
 
@@ -76,27 +77,6 @@ module.exports = (target = 'web', env = 'dev') => {
             },
           ]
         },
-        {
-          test: /\.(jpe?g|png|gif|svg)$/i,
-          use: [
-            {
-              loader: require.resolve('image-webpack-loader'),
-              query: {
-                bypassOnDebug: true,
-                optimizationLevel: 7,
-                interlaced: false,
-              },
-            },
-            {
-              loader: require.resolve('file-loader'),
-              query: {
-                hash: 'sha512',
-                digest: 'hex',
-                name: '[hash].[ext]',
-              },
-            },
-          ],
-        },
       ],
 
       exprContextRegExp: /$^/,
@@ -118,7 +98,7 @@ module.exports = (target = 'web', env = 'dev') => {
   };
 
   if (IS_NODE) {
-    config.externals = require('./node-externals')();
+    config.externals = [nodeExternals()];
     config.node = { console: true, __filename: true, __dirname: true };
   }
 

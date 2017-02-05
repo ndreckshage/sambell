@@ -17,29 +17,30 @@ yarn start
 Both `create-react-app` and `next.js` are great projects, try them. i wanted a few things i didn't get with those: universal app with react router support (not built into this by default), css modules, critical styles.
 
 features:
-- webpack 2 (tree shaking, code splitting, etc)
 - server side rendering
 - critical styles with `react-ssr-critical-styles`
-- babel (es2015, stage-1, react)
-- loaders (css, style (with isomorphic support), image)
-- polyfills (babel, isomorphic-fetch)
+- webpack 2 (tree shaking, code splitting, etc)
+- webpack loaders (css, style). absolute path requires from your project root.
+- babel (es2015, stage-1, react).
+- polyfills (babel, isomorphic-fetch).
 - configurable! add `webpack.overrides.js` to your project root & add whatever loaders you want, etc.*
 
-todo:
-- [x] polyfills (isomorphic-fetch etc)
+next:
 - [ ] eslint (airbnb)
-- [x] react-router example
-- [ ] react-router-auth0 example
-- [ ] react-router-auth0-apollo example
+- [ ] gerty.config.js instead of webpack overrides
+- [ ] hot module replacement / auto reload
+- [ ] better console?
 
 examples:
-- 1 sambell-w-react-router https://github.com/HumbleSpark/sambell-w-react-router
-- 2 sambell-w-react-router-auth0
-- 3 sambell-w-react-router-auth0-apollo
+- [x] sambell-w-react-router https://github.com/HumbleSpark/sambell-w-react-router
+- [ ] sambell-w-react-router-auth0
+- [ ] sambell-w-react-router-auth0-apollo
 
 
 \**webpack.overrides.js*
+
 ```
+// @NOTE this file is not compiled, use only whats available in your node version.
 module.exports = (config) => {
   config.devtool = 'eval';
   return config;
