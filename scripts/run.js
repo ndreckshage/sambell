@@ -15,7 +15,6 @@ const refreshServer = ([clientEntry, serverEntry]) => {
   process.env.NODE_PATH = nodeModulesPath;
   process.env.SAMBELL_CLIENT_OUTPUT_DIR = webpackClientDevConfig.output.path;
   process.env.SAMBELL_CLIENT_ENTRY = path.resolve(webpackClientDevConfig.output.publicPath, clientEntry);
-  process.env.SAMBELL_SERVER_PORT = process.env.SAMBELL_SERVER_PORT || '3000';
 
   const serverPath = path.resolve(webpackServerDevConfig.output.path, serverEntry);
   server = spawn('node', [serverPath], { stdio: 'inherit', env: process.env });
