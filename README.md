@@ -37,7 +37,6 @@ examples:
 - [ ] sambell-w-react-router-auth0
 - [ ] sambell-w-react-router-auth0-apollo
 
-
 \**webpack.overrides.js*
 
 ```

@@ -2,11 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
-const baseOutput = () => {
-  if (process.env.SAMBELL_SCRIPT === 'run') return path.resolve(__dirname, '..', 'build');
-  return path.resolve(process.cwd(), 'build');
-};
-
 module.exports = (target = 'web', env = 'dev') => {
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
@@ -31,8 +26,8 @@ module.exports = (target = 'web', env = 'dev') => {
     },
 
     output: {
-      path: path.resolve(baseOutput(), scope),
-      publicPath: '/assets/',
+      path: path.resolve(process.cwd(), '.sambell', scope),
+      publicPath: '/sambell/',
       filename: `${IS_WEB && IS_PROD ? '[hash].' : ''}[name].js`,
       chunkFilename: `${IS_WEB && IS_PROD ? '[chunkhash].' : ''}[id].[name].js`,
     },

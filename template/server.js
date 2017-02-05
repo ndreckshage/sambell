@@ -4,7 +4,7 @@ import { renderToString } from 'react-dom/server';
 import { GatherCriticalStyles, stringifyStyles } from 'react-ssr-critical-styles';
 import App from 'App';
 
-const template = (src, content = '', criticalStyles = '') => {
+const template = (content = '', criticalStyles = '') => {
   return `
     <!doctype html>
     <html lang="en">
@@ -12,7 +12,7 @@ const template = (src, content = '', criticalStyles = '') => {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>sambell</title>
-        <script type="text/javascript" src="${src}" async></script>
+        <script type="text/javascript" src="/sambell/${process.env.SAMBELL_CLIENT_ENTRY || 'run.js'}" async></script>
         <style id="critical-styles">${criticalStyles}</style>
       </head>
       <body>
@@ -22,7 +22,6 @@ const template = (src, content = '', criticalStyles = '') => {
   `;
 };
 
-const assetMount = express.static(process.env.SAMBELL_CLIENT_OUTPUT_DIR);
 const renderApp = (req, res) => {
   let criticalStyles = [];
   const content = renderToString(
@@ -31,10 +30,11 @@ const renderApp = (req, res) => {
     </GatherCriticalStyles>
   );
 
-  res.status(200).send(template(process.env.SAMBELL_CLIENT_ENTRY, content, stringifyStyles(criticalStyles)));
+  res.status(200).send(template(content, stringifyStyles(criticalStyles)));
 };
 
 express()
-  .use('/assets/', assetMount)
+  .use('/sambell/', express.static('.sambell/client'))
+  .use('/static/', express.static('static'))
   .get('*', renderApp)
   .listen(3000);
