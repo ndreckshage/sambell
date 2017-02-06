@@ -1,36 +1,28 @@
 import React from 'react';
 import express from 'express';
-import { renderToString } from 'react-dom/server';
-import { GatherCriticalStyles, stringifyStyles } from 'react-ssr-critical-styles';
+import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import StaticRouter from 'react-router-dom/StaticRouter';
+import flush from 'styled-jsx/server';
 import App from 'App';
 
-const template = (content = '', criticalStyles = '') => {
-  return `
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>sambell</title>
-        <script type="text/javascript" src="/sambell/${process.env.SAMBELL_CLIENT_ENTRY || 'run.js'}" async></script>
-        <style id="critical-styles">${criticalStyles}</style>
-      </head>
-      <body>
-        <div id="root">${content}</div>
-      </body>
-    </html>
-  `;
-};
+const template = (__html, styles) =>
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>sambell</title>
+      {styles}
+      <script type="text/javascript" src={`/sambell/${process.env.SAMBELL_CLIENT_ENTRY || 'run.js'}`} async></script>
+    </head>
+    <body>
+      <div id="root" dangerouslySetInnerHTML={{ __html }} />
+    </body>
+  </html>
 
 const renderApp = (req, res) => {
-  let criticalStyles = [];
-  const content = renderToString(
-    <GatherCriticalStyles addCriticalStyles={(s) => criticalStyles.push(s)}>
-      <App />
-    </GatherCriticalStyles>
-  );
-
-  res.status(200).send(template(content, stringifyStyles(criticalStyles)));
+  const app = renderToString(<StaticRouter location={req.url} context={{}} children={<App />} />);
+  const html = renderToStaticMarkup(template(app, flush()));
+  res.status(200).send(`<!doctype html>${html}`);
 };
 
 express()

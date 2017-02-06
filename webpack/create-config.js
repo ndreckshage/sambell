@@ -1,18 +1,15 @@
 const webpack = require('webpack');
-const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 
 module.exports = (target = 'web', env = 'dev') => {
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
   const IS_PROD = env === 'prod';
   const IS_DEV = env === 'dev';
-
-  // Set node env here based on webpack config. Mostly for client build
-  process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
-
-  // Put client and server code in separate directories.
   const scope = IS_NODE ? 'server' : 'client';
+
+  process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
   const config = {
     target: target,
@@ -34,8 +31,8 @@ module.exports = (target = 'web', env = 'dev') => {
 
     resolve: {
       modules: [
-        'node_modules',
         process.cwd(),
+        path.resolve(process.cwd(), 'node_modules'),
       ],
     },
 
@@ -51,30 +48,13 @@ module.exports = (target = 'web', env = 'dev') => {
               require.resolve('babel-preset-stage-1'),
               require.resolve('babel-preset-react'),
             ],
+            plugins: [
+              require.resolve('styled-jsx/babel')
+            ],
           },
-        },
-        {
-          test: /\.css$/,
-          use: [
-            {
-              loader: require.resolve('@humblespark/style-loader'),
-              query: {
-                fullLocalExport: true,
-              },
-            },
-            {
-              loader: require.resolve('css-loader'),
-              query: {
-                modules: true,
-                sourceMap: false,
-                localIdentName: `${IS_DEV ? '[name]__[local]___' : ''}[hash:base64:5]`,
-              },
-            },
-          ]
         },
       ],
 
-      exprContextRegExp: /$^/,
       exprContextCritical: false,
     },
 
@@ -97,10 +77,10 @@ module.exports = (target = 'web', env = 'dev') => {
     config.node = { console: true, __filename: true, __dirname: true };
   }
 
-  let overrides = c => c;
   try {
-    overrides = require(path.resolve(process.cwd(), 'webpack.overrides'));
+    const gerty = require(path.resolve(process.cwd(), 'gerty'));
+    if (gerty.webpack) return gerty.webpack(config, { node: IS_NODE, dev: IS_DEV })
   } catch (e) {}
 
-  return overrides(config);
+  return config;
 };

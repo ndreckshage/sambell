@@ -3,10 +3,11 @@
     "express": "^4.14.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-ssr-critical-styles": "^0.1.2"
+    "react-router-dom": "4.0.0-beta.4",
+    "styled-jsx": "^0.5.4"
   },
   "devDependencies": {
-    "sambell": "^2.0.0-beta.10"
+    "sambell": "^2.0.0-beta.13"
   },
   "scripts": {
     "start": "sambell run",

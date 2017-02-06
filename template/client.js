@@ -1,10 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { RemoveCriticalStyles } from 'react-ssr-critical-styles';
+import BrowserRouter from 'react-router-dom/BrowserRouter';
 import App from 'App';
 
-render((
-  <RemoveCriticalStyles styleId="critical-styles">
-    <App />
-  </RemoveCriticalStyles>
-), document.getElementById('root'));
+render(<BrowserRouter children={<App />} />, document.getElementById('root'));
