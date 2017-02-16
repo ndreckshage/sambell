@@ -40,12 +40,17 @@ yarn start
 - Plugins: [styled-jsx](https://github.com/zeit/styled-jsx)
 
 **Router**
+
 - Client side SPA with [react-router](https://github.com/ReactTraining/react-router) **version 4**.
 - Easy to add non-v4 react-router if you prefer that. But v4 is really nice if starting a new project.
 
 **CSS**
 
 - [styled-jsx](https://github.com/zeit/styled-jsx) is a great feature of Next.js that I bring in here. I find it to be more pleasant than `css-modules`, and eaiser to work with for a universal application (critical styles, etc).
+
+**sambell/env**
+
+- `import { CLIENT_ENTRY, CLIENT_OUTPUT_DIR, WEBPACK_PUBLIC_PATH } from 'sambell/env';` to make creating your html template easy in `server.js`.
 
 **Other**
 
@@ -55,14 +60,20 @@ yarn start
 
 - You get a `server.js` file. You have full control over client and server.
 - Add a `gerty.js` file to your project root.
+- Currently, webpack only function that it called. called with:
+ - `config` (base config from sambell). for you to overrides
+ - `settings` (`{ dev, node }`) to conditionally alter config
+ - `webpack` webpack instance for you to use if needed.
 
 \**gerty.js*
 
-```
-// @NOTE this file is not compiled, use only whats available in your node version. Webpack config only right now.
+```javascript
+// @NOTE optional!
+// @NOTE this file is not compiled, use only whats available in your node version!
 
 module.exports = {
-  webpack: (config, { dev, node }) => {
+  // full webpack overrides
+  webpack: (config, { dev, node }, webpack) => {
     config.devtool = 'eval';
     return config;
   },

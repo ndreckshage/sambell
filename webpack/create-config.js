@@ -17,9 +17,8 @@ module.exports = (target = 'web', env = 'dev') => {
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
   const buildDir = getBuildDir(scope);
-  const publicPath = '/static/webpack/';
 
-  const config = {
+  let config = {
     target: target,
     context: process.cwd(),
     entry: {
@@ -32,7 +31,7 @@ module.exports = (target = 'web', env = 'dev') => {
 
     output: {
       path: path.resolve(process.cwd(), buildDir),
-      publicPath,
+      publicPath: '/static/webpack/',
       filename: `${IS_WEB && IS_PROD ? '[hash].' : ''}[name].js`,
       chunkFilename: `${IS_WEB && IS_PROD ? '[chunkhash].' : ''}[id].[name].js`,
     },
@@ -76,14 +75,8 @@ module.exports = (target = 'web', env = 'dev') => {
 
     plugins: [
       IS_WEB ? new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        },
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }) : null,
-      new webpack.DefinePlugin({
-        SAMBELL_CLIENT_OUTPUT_DIR: JSON.stringify(getBuildDir(CLIENT_ENTRY)),
-        SAMBELL_PUBLIC_PATH: JSON.stringify(publicPath),
-      }),
       IS_PROD ? new webpack.optimize.UglifyJsPlugin({ compress: { warnings: true }}) : null,
       IS_PROD ? new webpack.optimize.AggressiveMergingPlugin() : null,
     ].filter(a => a),
@@ -97,10 +90,17 @@ module.exports = (target = 'web', env = 'dev') => {
     config.node = { console: true, __filename: true, __dirname: true };
   }
 
-  try {
-    const gerty = require(path.resolve(process.cwd(), 'gerty'));
-    if (gerty.webpack) return gerty.webpack(config, { node: IS_NODE, dev: IS_DEV })
-  } catch (e) {}
+  let gerty = {};
+  try { gerty = require(path.resolve(process.cwd(), 'gerty')); } catch (e) {}
+  if (gerty.webpack) config = gerty.webpack(config, { node: IS_NODE, dev: IS_DEV }, webpack);
+
+  config.plugins = [
+    ...config.plugins,
+    new webpack.DefinePlugin({
+      SAMBELL_CLIENT_OUTPUT_DIR: JSON.stringify(getBuildDir(CLIENT_ENTRY)),
+      SAMBELL_PUBLIC_PATH: JSON.stringify(config.output.publicPath),
+    }),
+  ];
 
   return config;
 };
