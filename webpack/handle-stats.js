@@ -14,6 +14,7 @@ module.exports = cb => (err, multiStats) => {
     console.log(stats.toString({ chunks: false, colors: true }));
 
     const entry = typeof json.assetsByChunkName.run === 'object' ? json.assetsByChunkName.run[0] : json.assetsByChunkName.run;
+
     if (stats.compilation.compiler.options.target === 'web') {
       clientEntry = entry;
     } else {

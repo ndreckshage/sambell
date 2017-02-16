@@ -2,14 +2,22 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 
+const BUILD_PREFIX = '.sambell';
+const getBuildDir = scope => path.join(BUILD_PREFIX, scope);
+
 module.exports = (target = 'web', env = 'dev') => {
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
   const IS_PROD = env === 'prod';
   const IS_DEV = env === 'dev';
-  const scope = IS_NODE ? 'server' : 'client';
+  const SERVER_ENTRY = 'server';
+  const CLIENT_ENTRY = 'client';
+  const scope = IS_NODE ? SERVER_ENTRY : CLIENT_ENTRY;
 
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
+
+  const buildDir = getBuildDir(scope);
+  const publicPath = '/static/webpack/';
 
   const config = {
     target: target,
@@ -23,8 +31,8 @@ module.exports = (target = 'web', env = 'dev') => {
     },
 
     output: {
-      path: path.resolve(process.cwd(), '.sambell', scope),
-      publicPath: '/sambell/',
+      path: path.resolve(process.cwd(), buildDir),
+      publicPath,
       filename: `${IS_WEB && IS_PROD ? '[hash].' : ''}[name].js`,
       chunkFilename: `${IS_WEB && IS_PROD ? '[chunkhash].' : ''}[id].[name].js`,
     },
@@ -49,7 +57,15 @@ module.exports = (target = 'web', env = 'dev') => {
               require.resolve('babel-preset-react'),
             ],
             plugins: [
-              require.resolve('styled-jsx/babel')
+              require.resolve('styled-jsx/babel'),
+              [
+                require.resolve('babel-plugin-module-resolver'),
+                {
+                  alias: {
+                    'sambell/env': path.resolve(__dirname, 'sambell-env'),
+                  },
+                },
+              ],
             ],
           },
         },
@@ -64,6 +80,10 @@ module.exports = (target = 'web', env = 'dev') => {
           'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         },
       }) : null,
+      new webpack.DefinePlugin({
+        SAMBELL_CLIENT_OUTPUT_DIR: JSON.stringify(getBuildDir(CLIENT_ENTRY)),
+        SAMBELL_PUBLIC_PATH: JSON.stringify(publicPath),
+      }),
       IS_PROD ? new webpack.optimize.UglifyJsPlugin({ compress: { warnings: true }}) : null,
       IS_PROD ? new webpack.optimize.AggressiveMergingPlugin() : null,
     ].filter(a => a),

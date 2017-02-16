@@ -1,5 +1,6 @@
 import React from 'react';
 import express from 'express';
+import { CLIENT_ENTRY, CLIENT_OUTPUT_DIR, WEBPACK_PUBLIC_PATH } from 'sambell/env';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import StaticRouter from 'react-router-dom/StaticRouter';
 import flush from 'styled-jsx/server';
@@ -12,7 +13,7 @@ const template = (__html, styles) =>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>sambell</title>
       {styles}
-      <script type="text/javascript" src={`/sambell/${process.env.SAMBELL_CLIENT_ENTRY || 'run.js'}`} async></script>
+      <script type="text/javascript" src={`${WEBPACK_PUBLIC_PATH}${CLIENT_ENTRY}`} async></script>
     </head>
     <body>
       <div id="root" dangerouslySetInnerHTML={{ __html }} />
@@ -26,7 +27,7 @@ const renderApp = (req, res) => {
 };
 
 express()
-  .use('/sambell/', express.static('.sambell/client'))
+  .use(WEBPACK_PUBLIC_PATH, express.static(CLIENT_OUTPUT_DIR))
   .use('/static/', express.static('static'))
   .get('*', renderApp)
   .listen(3000);
