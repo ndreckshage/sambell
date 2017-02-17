@@ -21,15 +21,23 @@ const template = (content, criticalStyles) =>
     </body>
   </html>
 
-const renderApp = (req, res) =>
-  res.status(200).send(`
-    <!doctype html>
-    ${renderToStaticMarkup(template(renderToString(
-      <StaticRouter location={req.url} context={{}}>
-        <App />
-      </StaticRouter>
-    ), flush()))}
-  `);
+const renderApp = (req, res) => {
+  const context = {};
+  const html = renderToString(
+    <StaticRouter location={req.url} context={context}>
+      <App />
+    </StaticRouter>
+  );
+
+  if (context.url) {
+    res.redirect(context.url);
+  } else {
+    res.status(200).send(`
+      <!doctype html>
+      ${renderToStaticMarkup(template(html, flush()))}
+    `);
+  }
+}
 
 express()
   .use(compression())
