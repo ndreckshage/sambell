@@ -26,7 +26,7 @@ const renderApp = (req, res) =>
     <!doctype html>
     ${renderToStaticMarkup(template(renderToString(
       <StaticRouter location={req.url} context={{}}>
-        <Layout />
+        <App />
       </StaticRouter>
     ), flush()))}
   `);

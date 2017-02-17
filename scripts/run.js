@@ -18,7 +18,7 @@ const refreshServer = (clientEntry = null, serverEntry = null) => {
     if (server) server.kill();
     console.log(chalk.green(`${server ? 'Restarting' : 'Starting'} sambell...`));
     server = spawn('node', [serverPath], { stdio: 'inherit', env: process.env });
-    console.log(chalk.bold.green(`RUN!`));
+    console.log(chalk.green(`${chalk.bold('RUN!')} (localhost:${process.env.PORT || 3000})`));
   });
 };
 
