@@ -13,7 +13,7 @@ I think [next.js](https://github.com/zeit/next.js) is great, with one big flaw: 
 
 ## What will my app look like?!?
 
-Check out [the layout](layout)!
+Check out [the template](template)!
 
 **3 files**. **<100 loc** total for a universal single page app.
 
