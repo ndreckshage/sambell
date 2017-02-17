@@ -16,12 +16,13 @@ const refreshServer = (clientEntry = null, serverEntry = null) => {
   const serverPath = path.resolve(webpackServerDevConfig.output.path, serverEntry);
   replaceEntry(serverPath, _clientEntry, () => {
     if (server) server.kill();
-    console.log(chalk.cyan(`${server ? 'Restarting' : 'Starting'} sambell...`));
+    console.log(chalk.green(`${server ? 'Restarting' : 'Starting'} sambell...`));
     server = spawn('node', [serverPath], { stdio: 'inherit', env: process.env });
+    console.log(chalk.bold.green(`RUN!`));
   });
 };
 
 webpack([
   webpackClientDevConfig,
   webpackServerDevConfig,
-]).watch({}, handleWebpackStats(refreshServer));
+]).watch({}, handleWebpackStats(refreshServer, webpackClientDevConfig));

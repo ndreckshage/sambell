@@ -14,13 +14,12 @@ const finalize = (clientEntry = null, serverEntry = null) => {
 
   const serverPath = path.resolve(webpackServerProdConfig.output.path, serverEntry);
   replaceEntry(serverPath, clientEntry, () => {
-    console.log(chalk.green('Production version built. Run...'));
-    console.log(chalk.cyan(`node ${serverPath}`));
+    console.log(chalk.green(`Production version built. Run... ${chalk.bold(`node ${path.relative(process.cwd(), serverPath)}`)}`));
+    console.log('');
   });
 };
 
-console.log(chalk.green('Building...'));
 webpack([
   webpackClientProdConfig,
   webpackServerProdConfig,
-]).run(handleWebpackStats(finalize));
+]).run(handleWebpackStats(finalize, webpackClientProdConfig));
