@@ -32,6 +32,7 @@ yarn start
 
 - Server side rendering. Universal.
 - Critical styles with [styled-jsx](https://github.com/zeit/styled-jsx)
+- Webpack build optimized for production.
 
 **Webpack**
 
