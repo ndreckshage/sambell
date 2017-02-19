@@ -40,6 +40,7 @@ yarn start
 - Webpack runs for **both** client and server code.
 - Minimal loaders (only a JS loader). But it is configurable if you want to add more.
 - **absolute path** requires from your project root. `import App from 'App'`
+- Sourcemaps for client & server
 
 **Babel**
 
@@ -61,7 +62,7 @@ yarn start
 
 **Other**
 
-- Polyfills: isomorphic-fetch, babel-polyfill
+- Polyfills: `isomorphic-fetch`, `babel-polyfill`
 
 **Configurable**
 
