@@ -94,7 +94,8 @@ module.exports = (target = 'web', env = 'dev') => {
     ].filter(a => a),
 
     performance: { hints: false },
-    devtool: IS_NODE || IS_DEV ? 'cheap-module-source-map' : false,
+    devtool: IS_DEV ? 'cheap-module-source-map' :
+      IS_NODE ? 'cheap-source-map' : false,
   };
 
   if (IS_NODE) {
