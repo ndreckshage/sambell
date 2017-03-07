@@ -83,14 +83,14 @@ module.exports = (target = 'web', env = 'dev') => {
         },
       }) : null,
 
-      IS_PROD ? new webpack.optimize.UglifyJsPlugin({
+      IS_WEB && IS_PROD ? new webpack.optimize.UglifyJsPlugin({
         compress: { screw_ie8: true, warnings: false },
         mangle: { screw_ie8: true },
         output: { comments: false, screw_ie8: true },
         sourceMap: false
       }) : null,
 
-      IS_PROD ? new webpack.optimize.AggressiveMergingPlugin() : null,
+      IS_WEB && IS_PROD ? new webpack.optimize.AggressiveMergingPlugin() : null,
     ].filter(a => a),
 
     performance: { hints: false },
