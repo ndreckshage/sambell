@@ -27,7 +27,7 @@ module.exports = (target = 'web', env = 'dev') => {
       run: [
         require.resolve('babel-polyfill'),
         require.resolve(`isomorphic-fetch/fetch-npm-${IS_NODE ? 'node' : 'browserify'}`),
-        IS_NODE ? 'source-map-support/register' : null,
+        IS_NODE ? require.resolve('source-map-support/register') : null,
         scope,
       ].filter(x => x),
     },
