@@ -7,7 +7,6 @@ const BUILD_PREFIX = '.sambell';
 const getBuildDir = scope => path.join(BUILD_PREFIX, scope);
 
 module.exports = (target = 'web', env = 'dev') => {
-  console.log('here we go')
   const IS_NODE = target === 'node';
   const IS_WEB = target === 'web';
 

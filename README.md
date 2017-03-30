@@ -11,10 +11,6 @@ Both [create-react-app](https://github.com/facebookincubator/create-react-app) a
 
 I think [next.js](https://github.com/zeit/next.js) is great, with one big flaw: you don't get a layout file. The entire application re-renders on route changes. This makes things like animated transitions impossible. But even something simple like a **material design ink button** link won't work, because the re-render kills the button animation. I think [react-router](https://github.com/ReactTraining/react-router) is fundamentally more powerful, and opt for that.
 
-###### When out of beta?
-
-As soon as React Router v4 is.
-
 ## What will my app look like?!?
 
 Check out [the template](template)!
