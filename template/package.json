@@ -2,14 +2,14 @@
   "dependencies": {
     "compression": "^1.6.2",
     "domready": "^1.0.8",
-    "express": "^4.15.0",
+    "express": "^4.15.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-router-dom": "4.0.0-beta.8",
+    "react-router-dom": "4.0.0",
     "styled-jsx": "^0.5.7"
   },
   "devDependencies": {
-    "sambell": "^2.0.0-beta.26"
+    "sambell": "^2.0.0"
   },
   "scripts": {
     "start": "sambell run",
