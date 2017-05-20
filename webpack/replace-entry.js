@@ -18,6 +18,7 @@ module.exports = (
   cb
 ) => {
   const clientManifestEntry = getAdjustedChunkPath(clientEntriesByChunk.manifest);
+  const clientVendorEntry = getAdjustedChunkPath(clientEntriesByChunk.vendor);
   const clientEntry = getAdjustedChunkPath(clientEntriesByChunk.run);
   const serverEntry = getAdjustedChunkPath(serverEntriesByChunk.run);
 
@@ -30,7 +31,8 @@ module.exports = (
     fs.readFile(clientManifestPath, 'utf8', (manifestErr, manifestContents) => {
       const manifestSourceMap = new RegExp(/\n\/\/# sourceMappingURL=manifest\.js\.map/, 'g');
       serverEntryContents = serverEntryContents
-        .replace(/'{{SAMBELL_WEBPACK_INLINE_MANIFEST}}'/g, `\`${manifestContents.replace(manifestSourceMap, '')}\``)
+        .replace(/'{{SAMBELL_CLIENT_WEBPACK_MANIFEST}}'/g, `\`${manifestContents.replace(manifestSourceMap, '')}\``)
+        .replace(/{{SAMBELL_CLIENT_VENDOR_ENTRY}}/g, clientVendorEntry)
         .replace(/{{SAMBELL_CLIENT_ENTRY}}/g, clientEntry)
         .replace(/{{SAMBELL_CLIENT_CHUNKS}}/g, JSON.stringify(filesOnly(clientEntriesByChunk)));
 

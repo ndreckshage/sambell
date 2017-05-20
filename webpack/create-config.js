@@ -26,10 +26,15 @@ module.exports = (target = 'web', env = 'dev') => {
     context: process.cwd(),
     entry: {
       run: [
-        require.resolve('babel-polyfill'),
-        require.resolve(`isomorphic-fetch/fetch-npm-${IS_NODE ? 'node' : 'browserify'}`),
         IS_NODE ? require.resolve('source-map-support/register') : null,
+        IS_NODE ? require.resolve('isomorphic-fetch/fetch-npm-node') : null,
         scope,
+      ].filter(x => x),
+      vendor: [
+        require.resolve('babel-polyfill'),
+        require.resolve('isomorphic-fetch/fetch-npm-browserify'),
+        'react',
+        'react-dom'
       ].filter(x => x),
     },
 
@@ -109,6 +114,7 @@ module.exports = (target = 'web', env = 'dev') => {
 
   config.plugins = [
     ...config.plugins,
+    IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }) : null,
     IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' }) : null,
     IS_WEB ? new webpack.BannerPlugin({ banner: readyBanner, raw: true, exclude: 'manifest' }) : null,
     IS_WEB ? new webpack.DefinePlugin({
