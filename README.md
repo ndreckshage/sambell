@@ -15,7 +15,7 @@ I think [next.js](https://github.com/zeit/next.js) is great, with one big flaw: 
 
 Check out [the template](template)!
 
-**3 files**. **<100 loc** total for a universal single page app.
+**3 files**. **<100 loc** total for a universal single page app. (5 files to show async loading)
 
 ## Install
 
@@ -32,6 +32,7 @@ yarn start
 
 - Server side rendering. Universal.
 - Critical styles with [styled-jsx](https://github.com/zeit/styled-jsx)
+- Async loading of routes with `react-loadable` (forked version `@humblespark/react-loadable`)
 - Webpack build optimized for production.
 
 **Webpack**
@@ -58,7 +59,21 @@ yarn start
 
 **sambell/env**
 
-- `import { CLIENT_ENTRY, CLIENT_OUTPUT_DIR, WEBPACK_PUBLIC_PATH } from 'sambell/env';` to make creating your html template easy in `server.js`.
+- `import { WEBPACK_MANIFEST, CLIENT_ENTRY, CLIENT_CHUNKS, CLIENT_OUTPUT_DIR, WEBPACK_PUBLIC_PATH, waitForChunks } from 'sambell/env';` to make creating your html template easy in `server.js`.
+
+**Async components**
+
+- Full client & server side support for async loading components, with `react-loadable`
+- Forked version (`@humblespark/react-loadable`) to work with server side webpack build & a fix for checksum mismatch.
+- `import ready from 'sambell/ready';` `ready(() => renderApp())` for async webpack loading of chunks.
+
+```
+const MyAsyncComponent = Loadable({
+  loader: () => import(/* webpackChunkName: "components/MyAsyncComponent" */'components/MyAsyncComponent'),
+  webpackRequireWeakId: () => require.resolveWeak('components/MyAsyncComponent'),
+  chunkName: 'components/MyAsyncComponent',
+});
+```
 
 **Other**
 
