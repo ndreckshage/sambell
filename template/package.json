@@ -2,6 +2,7 @@
   "dependencies": {
     "@humblespark/react-loadable": "^3.4.1",
     "compression": "^1.6.2",
+    "domready": "^1.0.8",
     "express": "^4.15.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -9,7 +10,7 @@
     "styled-jsx": "^0.5.7"
   },
   "devDependencies": {
-    "sambell": "^2.0.0"
+    "sambell": "^3.0.1"
   },
   "scripts": {
     "start": "sambell run",

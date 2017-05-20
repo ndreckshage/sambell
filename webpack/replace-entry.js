@@ -1,9 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
+// @NOTE - webpack build vs run give us different things...
+const getAdjustedChunkPath = chunkPath => typeof chunkPath === 'object' ? chunkPath[0] : chunkPath;
+
 const filesOnly = clientEntriesByChunk => Object.keys(clientEntriesByChunk).reduce((acc, key) => {
   if (key === 'run' || key === 'manifest') return acc;
-  acc[key] = clientEntriesByChunk[key][0];
+  acc[key] = getAdjustedChunkPath(clientEntriesByChunk[key]);
   return acc;
 }, {});
 
@@ -14,9 +17,9 @@ module.exports = (
   clientEntriesByChunk,
   cb
 ) => {
-  const clientManifestEntry = clientEntriesByChunk.manifest[0];
-  const clientEntry = clientEntriesByChunk.run[0];
-  const serverEntry = serverEntriesByChunk.run[0];
+  const clientManifestEntry = getAdjustedChunkPath(clientEntriesByChunk.manifest);
+  const clientEntry = getAdjustedChunkPath(clientEntriesByChunk.run);
+  const serverEntry = getAdjustedChunkPath(serverEntriesByChunk.run);
 
   const serverPath = path.resolve(serverConfig.output.path, serverEntry);
   const clientManifestPath = path.resolve(clientConfig.output.path, clientManifestEntry);

@@ -1,5 +1,3 @@
-import domready from 'domready';
-
 let ready = false;
 let clientCalledReady = false;
 let clientCb = () => {};
@@ -11,7 +9,7 @@ const chunksReady = () => chunkCount() >= waitForChunks;
 const maybeLoad = () => {
   if (!ready && clientCalledReady && clientCb && chunksReady()) {
     ready = true;
-    domready(clientCb);
+    clientCb();
   }
 }
 

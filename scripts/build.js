@@ -6,20 +6,35 @@ const replaceEntry = require('./../webpack/replace-entry');
 const chalk = require('chalk');
 const path = require('path');
 
-const finalize = (clientEntry = null, serverEntry = null) => {
-  if (!clientEntry || !serverEntry) {
+var clientEntriesByChunk = '';
+const finalize = (serverEntriesByChunk = null, _clientEntriesByChunk = null) => {
+  if (_clientEntriesByChunk) clientEntriesByChunk = _clientEntriesByChunk;
+  if (!serverEntriesByChunk || !clientEntriesByChunk) {
     console.log(chalk.red('No client/server entry.'), clientEntry, serverEntry);
     return;
   }
 
+  const serverEntry = serverEntriesByChunk.run[0];
   const serverPath = path.resolve(webpackServerProdConfig.output.path, serverEntry);
-  replaceEntry(serverPath, clientEntry, () => {
-    console.log(chalk.green(`Production version built. Run... ${chalk.bold(`node ${path.relative(process.cwd(), serverPath)}`)}`));
-    console.log('');
-  });
+
+  replaceEntry(
+    webpackServerProdConfig,
+    webpackClientProdConfig,
+    serverEntriesByChunk,
+    clientEntriesByChunk,
+    () => {
+      console.log(chalk.green(`Production version built. Run... ${chalk.bold(`node ${path.relative(process.cwd(), serverPath)}`)}`));
+      console.log('');
+    }
+  );
 };
 
 webpack([
   webpackClientProdConfig,
   webpackServerProdConfig,
-]).run(handleWebpackStats(finalize, webpackClientProdConfig));
+]).run(
+  handleWebpackStats(
+    finalize,
+    webpackClientProdConfig
+  )
+);
