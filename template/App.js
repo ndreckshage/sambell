@@ -1,25 +1,18 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import Loadable from '@humblespark/react-loadable';
 
-const Moon = () =>
-  <div>
-    <p className="WakeMe">Wake me</p>
-    <p className="WhenIts">{`When it's quitting time`}</p>
-    <Link to="/outside">Go outside.</Link>
-    <style jsx>{`
-      .WakeMe {
-        color: #B71C1C;
-        font-size: 8rem;
-        margin: 0;
-      }
-      .WhenIts {
-        color: #111;
-        font-size: 2rem;
-      }
-    `}</style>
-  </div>
+const Moon = Loadable({
+  loader: () => import(/* webpackChunkName: "components/Moon" */'components/Moon'),
+  webpackRequireWeakId: () => require.resolveWeak('components/Moon'),
+  chunkName: 'components/Moon',
+});
 
-const Outside = () => <div>{`I can't let you go outside, Sam.`} <Link to="/">Go Home</Link>.</div>
+const Outside = Loadable({
+  loader: () => import(/* webpackChunkName: "components/Outside" */'components/Outside'),
+  webpackRequireWeakId: () => require.resolveWeak('components/Outside'),
+  chunkName: 'components/Outside',
+});
 
 export default () =>
   <div>

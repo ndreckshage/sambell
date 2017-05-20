@@ -1,11 +1,40 @@
 const fs = require('fs');
+const path = require('path');
 
-module.exports = (serverPath, clientEntry, cb) =>
-  fs.readFile(serverPath, 'utf8', (err, data) => {
-    if (err) throw new Error(err);
-    const result = data.replace(/{{SAMBELL_CLIENT_ENTRY}}/g, clientEntry);
-    fs.writeFile(serverPath, result, 'utf8', err => {
-      if (err) throw new Error(err);
-      cb()
+const filesOnly = clientEntriesByChunk => Object.keys(clientEntriesByChunk).reduce((acc, key) => {
+  if (key === 'run' || key === 'manifest') return acc;
+  acc[key] = clientEntriesByChunk[key][0];
+  return acc;
+}, {});
+
+module.exports = (
+  serverConfig,
+  clientConfig,
+  serverEntriesByChunk,
+  clientEntriesByChunk,
+  cb
+) => {
+  const clientManifestEntry = clientEntriesByChunk.manifest[0];
+  const clientEntry = clientEntriesByChunk.run[0];
+  const serverEntry = serverEntriesByChunk.run[0];
+
+  const serverPath = path.resolve(serverConfig.output.path, serverEntry);
+  const clientManifestPath = path.resolve(clientConfig.output.path, clientManifestEntry);
+
+  fs.readFile(serverPath, 'utf8', (serverFileErr, serverEntryContents) => {
+    if (serverFileErr) throw new Error(serverFileErr);
+
+    fs.readFile(clientManifestPath, 'utf8', (manifestErr, manifestContents) => {
+      const manifestSourceMap = new RegExp(/\n\/\/# sourceMappingURL=manifest\.js\.map/, 'g');
+      serverEntryContents = serverEntryContents
+        .replace(/'{{SAMBELL_WEBPACK_INLINE_MANIFEST}}'/g, `\`${manifestContents.replace(manifestSourceMap, '')}\``)
+        .replace(/{{SAMBELL_CLIENT_ENTRY}}/g, clientEntry)
+        .replace(/{{SAMBELL_CLIENT_CHUNKS}}/g, JSON.stringify(filesOnly(clientEntriesByChunk)));
+
+      fs.writeFile(serverPath, serverEntryContents, 'utf8', (serverRewriteErr) => {
+        if (serverRewriteErr) throw new Error(serverRewriteErr);
+        cb()
+      });
     });
   });
+}

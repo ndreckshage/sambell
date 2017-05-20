@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
-import domready from 'domready';
+import sambellReady from 'sambell/ready';
 import BrowserRouter from 'react-router-dom/BrowserRouter';
 import App from 'App';
 
-domready(() => {
+sambellReady(() => {
   render(
     <BrowserRouter>
       <App />

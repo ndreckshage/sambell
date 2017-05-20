@@ -18,13 +18,14 @@ module.exports = (cb, clientConfig) => (err, multiStats) => {
     return;
   }
 
-  let clientEntry = null;
-  let serverEntry = null;
+  let clientEntriesByChunk = null;
+  let serverEntriesByChunk = null;
+
   let hasError = false;
   multiStats.stats.forEach((stats) => {
     const json = stats.toJson({}, true);
-    const messages = formatWebpackMessages(json);
 
+    const messages = formatWebpackMessages(json);
     if (messages.errors.length) {
       const skipErr = prevErrorTimestamp && Date.now() - prevErrorTimestamp < LIKELY_SAME_ERR;
       prevErrorTimestamp = Date.now();
@@ -66,14 +67,13 @@ module.exports = (cb, clientConfig) => (err, multiStats) => {
       });
 
       console.log('');
-      const entry = typeof json.assetsByChunkName.run === 'object' ? json.assetsByChunkName.run[0] : json.assetsByChunkName.run;
       if (IS_WEB) {
-        clientEntry = entry;
+        clientEntriesByChunk = json.assetsByChunkName;
       } else {
-        serverEntry = entry;
+        serverEntriesByChunk = json.assetsByChunkName;
       }
     }
   });
 
-  if (!hasError) cb(clientEntry, serverEntry);
+  if (!hasError) cb(serverEntriesByChunk, clientEntriesByChunk);
 };

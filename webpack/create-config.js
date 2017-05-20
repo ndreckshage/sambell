@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const TimerPlugin = require('./timer-plugin');
 const path = require('path');
+const readyBanner = require('./ready-banner');
 
 const BUILD_PREFIX = '.sambell';
 const getBuildDir = scope => path.join(BUILD_PREFIX, scope);
@@ -65,6 +66,7 @@ module.exports = (target = 'web', env = 'dev') => {
                 {
                   alias: {
                     'sambell/env': path.resolve(__dirname, 'sambell-env'),
+                    'sambell/ready': path.resolve(__dirname, 'sambell-ready')
                   },
                 },
               ],
@@ -77,12 +79,6 @@ module.exports = (target = 'web', env = 'dev') => {
     },
 
     plugins: [
-      IS_WEB ? new webpack.DefinePlugin({
-        "process.env": {
-          NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-        },
-      }) : null,
-
       IS_WEB && IS_PROD ? new webpack.optimize.UglifyJsPlugin({
         compress: { screw_ie8: true, warnings: false },
         mangle: { screw_ie8: true },
@@ -94,8 +90,10 @@ module.exports = (target = 'web', env = 'dev') => {
     ].filter(a => a),
 
     performance: { hints: false },
-    devtool: IS_DEV ? 'cheap-module-source-map' :
-      IS_NODE ? 'cheap-source-map' : false,
+    devtool: IS_DEV ?
+      'cheap-module-source-map' :
+      IS_NODE ?
+        'cheap-source-map' : false,
   };
 
   if (IS_NODE) {
@@ -111,12 +109,19 @@ module.exports = (target = 'web', env = 'dev') => {
 
   config.plugins = [
     ...config.plugins,
+    IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' }) : null,
+    IS_WEB ? new webpack.BannerPlugin({ banner: readyBanner, raw: true, exclude: 'manifest' }) : null,
+    IS_WEB ? new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      },
+    }) : null,
     new TimerPlugin(),
     new webpack.DefinePlugin({
       SAMBELL_CLIENT_OUTPUT_DIR: JSON.stringify(getBuildDir(CLIENT_ENTRY)),
       SAMBELL_PUBLIC_PATH: JSON.stringify(config.output.publicPath),
     }),
-  ];
+  ].filter(x => x);
 
   return config;
 };
