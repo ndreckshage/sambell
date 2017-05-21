@@ -7,6 +7,7 @@ const chunkCount = () => window.__SAMBELL_CHUNK_COUNT__ || 0;
 const chunksReady = () => chunkCount() >= waitForChunks;
 
 const maybeLoad = () => {
+  console.log('ml', clientCalledReady, chunkCount, chunksReady())
   if (!ready && clientCalledReady && clientCb && chunksReady()) {
     ready = true;
     clientCb();
@@ -16,6 +17,7 @@ const maybeLoad = () => {
 window.__SAMBELL_CHUNK_CB__ = maybeLoad;
 
 export default cb => {
+  console.log('client called');
   clientCalledReady = true;
   clientCb = cb;
   maybeLoad();
