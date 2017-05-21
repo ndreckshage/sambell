@@ -116,7 +116,7 @@ module.exports = (target = 'web', env = 'dev') => {
     ...config.plugins,
     IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }) : null,
     IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' }) : null,
-    IS_WEB ? new webpack.BannerPlugin({ banner: readyBanner, raw: true, exclude: 'manifest' }) : null,
+    IS_WEB ? new webpack.BannerPlugin({ banner: readyBanner, raw: true, exclude: /manifest\.js/ }) : null,
     IS_WEB ? new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV)
