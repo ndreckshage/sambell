@@ -90,8 +90,6 @@ module.exports = (target = 'web', env = 'dev') => {
         output: { comments: false, screw_ie8: true },
         sourceMap: false
       }) : null,
-
-      IS_WEB && IS_PROD ? new webpack.optimize.AggressiveMergingPlugin() : null,
     ].filter(a => a),
 
     performance: { hints: false },

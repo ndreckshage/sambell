@@ -30,7 +30,7 @@ const template = (content, criticalStyles, chunkNames) => (
       <script type="text/javascript" dangerouslySetInnerHTML={{ __html: waitForChunks(chunkNames.length + 2 /* chunks + entry + vendor */)}} />
       <script type="text/javascript" src={`${WEBPACK_PUBLIC_PATH}${CLIENT_VENDOR_ENTRY}`} async />
       <script type="text/javascript" src={`${WEBPACK_PUBLIC_PATH}${CLIENT_ENTRY}`} async />
-      {chunkNames.map(chunkName => CLIENT_CHUNKS[chunkName] && (
+      {chunkNames.map(chunkName => (
         <script key={chunkName} type="text/javascript" src={`${WEBPACK_PUBLIC_PATH}${CLIENT_CHUNKS[chunkName]}`} async />
       ))}
     </head>
