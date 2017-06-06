@@ -85,18 +85,28 @@ module.exports = (target = 'web', env = 'dev') => {
 
     plugins: [
       IS_WEB && IS_PROD ? new webpack.optimize.UglifyJsPlugin({
-        compress: { screw_ie8: true, warnings: false },
-        mangle: { screw_ie8: true },
-        output: { comments: false, screw_ie8: true },
-        sourceMap: false
+        compress: {
+          warnings: false,
+          comparisons: false,
+        },
+        output: {
+          comments: false,
+        },
+        sourceMap: true,
+      }) : null,
+
+      IS_WEB && IS_PROD ? new webpack.SourceMapDevToolPlugin({
+        filename: '[hash].[name].js.map',
+        exclude: /manifest\.js/,
       }) : null,
     ].filter(a => a),
 
-    performance: { hints: false },
     devtool: IS_DEV ?
       'cheap-module-source-map' :
       IS_NODE ?
         'cheap-source-map' : false,
+
+    performance: { hints: false },
   };
 
   if (IS_NODE) {

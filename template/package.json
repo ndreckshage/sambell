@@ -7,13 +7,14 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-router-dom": "4.1.1",
-    "styled-jsx": "^0.5.7"
+    "styled-jsx": "^1.0.4"
   },
   "devDependencies": {
-    "sambell": "^3.0.1"
+    "sambell": "^4.0.0"
   },
   "scripts": {
     "start": "sambell run",
-    "build": "sambell build"
+    "build": "sambell build",
+    "sambell-version": "sambell -v"
   }
 }

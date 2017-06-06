@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "3.1.5",
+  "version": "4.0.0",
   "license": "MIT",
   "files": [
     "bin",
@@ -26,15 +26,15 @@
     "minimist": "^1.2.0",
     "ncp": "^2.0.0",
     "react": "^15.5.4",
-    "react-dev-utils": "^1.0.1",
+    "react-dev-utils": "^3.0.0",
     "source-map-support": "^0.4.15",
-    "styled-jsx": "^0.5.7",
-    "webpack": "2.5.1",
+    "styled-jsx": "^1.0.4",
+    "webpack": "2.6.1",
     "webpack-node-externals": "^1.6.0"
   },
   "peerDependencies": {
     "react": "^15.0.0",
-    "styled-jsx": "^0.5.0"
+    "styled-jsx": "^1.0.0"
   },
   "tags": [
     "react",
