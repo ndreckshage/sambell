@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "license": "MIT",
   "files": ["bin", "scripts", "template", "webpack"],
   "bin": {
@@ -28,8 +28,8 @@
     "webpack-node-externals": "1.6.0"
   },
   "peerDependencies": {
-    "react": "15.0.0",
-    "styled-jsx": "1.0.0"
+    "react": "^15.0.0",
+    "styled-jsx": "^1.0.0"
   },
   "tags": ["react", "universal", "starter-kit"],
   "keywords": ["react", "universal", "starter-kit"]
