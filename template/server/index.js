@@ -12,14 +12,14 @@ import {
   waitForChunks, // instruct our loader to wait for x (possibly async) chunks before render
 } from 'sambell/env';
 
-import { flushWebpackChunkNames } from '@humblespark/react-loadable';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import flushCriticalStyles from 'styled-jsx/server';
+import Loadable from '@humblespark/react-loadable';
 
 import StaticRouter from 'react-router-dom/StaticRouter';
 import App from 'components/App';
 
-const template = (content, criticalStyles, chunkNames) => (
+const template = (content, criticalStyles, chunkNames = []) => (
   <html lang="en">
     <head>
       <meta charset="utf-8" />
@@ -42,17 +42,12 @@ const template = (content, criticalStyles, chunkNames) => (
 
 const renderApp = (req, res) => {
   const context = {};
-  const html = renderToString(
-    <StaticRouter location={req.url} context={context}>
-      <App />
-    </StaticRouter>
-  );
-
+  const html = renderToString(<StaticRouter location={req.url} context={context} children={<App />} />);
   if (context.url) {
     res.redirect(context.url);
   } else {
     res.status(200).send(`<!doctype html>${renderToStaticMarkup(template(
-      html, flushCriticalStyles(), flushWebpackChunkNames()
+      html, flushCriticalStyles(), Loadable.flushRenderedMetadata().map(metadata => metadata.importedModulePath)
     ))}`);
   }
 }

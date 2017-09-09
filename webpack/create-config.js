@@ -34,7 +34,7 @@ module.exports = (target = 'web', env = 'dev') => {
         require.resolve('babel-polyfill'),
         require.resolve('isomorphic-fetch/fetch-npm-browserify'),
         'react',
-        'react-dom'
+        'react-dom',
       ].filter(x => x),
     },
 
@@ -46,10 +46,7 @@ module.exports = (target = 'web', env = 'dev') => {
     },
 
     resolve: {
-      modules: [
-        process.cwd(),
-        path.resolve(process.cwd(), 'node_modules'),
-      ],
+      modules: [process.cwd(), path.resolve(process.cwd(), 'node_modules')],
     },
 
     module: {
@@ -67,11 +64,17 @@ module.exports = (target = 'web', env = 'dev') => {
             plugins: [
               require.resolve('styled-jsx/babel'),
               [
+                require.resolve('babel-plugin-import-inspector'),
+                {
+                  webpackRequireWeakId: true,
+                },
+              ],
+              [
                 require.resolve('babel-plugin-module-resolver'),
                 {
                   alias: {
                     'sambell/env': path.resolve(__dirname, 'sambell-env'),
-                    'sambell/ready': path.resolve(__dirname, 'sambell-ready')
+                    'sambell/ready': path.resolve(__dirname, 'sambell-ready'),
                   },
                 },
               ],
@@ -84,52 +87,77 @@ module.exports = (target = 'web', env = 'dev') => {
     },
 
     plugins: [
-      IS_WEB && IS_PROD ? new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false,
-          comparisons: false,
-        },
-        output: {
-          comments: false,
-        },
-        sourceMap: true,
-      }) : null,
+      IS_WEB && IS_PROD
+        ? new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false,
+              comparisons: false,
+            },
+            output: {
+              comments: false,
+            },
+            sourceMap: true,
+          })
+        : null,
 
-      IS_WEB && IS_PROD ? new webpack.SourceMapDevToolPlugin({
-        filename: '[hash].[name].js.map',
-        exclude: /manifest\.js/,
-      }) : null,
+      IS_WEB && IS_PROD
+        ? new webpack.SourceMapDevToolPlugin({
+            filename: '[hash].[name].js.map',
+            exclude: /manifest\.js/,
+          })
+        : null,
     ].filter(a => a),
 
-    devtool: IS_DEV ?
-      'cheap-module-source-map' :
-      IS_NODE ?
-        'cheap-source-map' : false,
+    devtool: IS_DEV
+      ? 'cheap-module-source-map'
+      : IS_NODE ? 'cheap-source-map' : false,
 
     performance: { hints: false },
   };
 
   if (IS_NODE) {
-    config.externals = [nodeExternals()];
+    config.externals = [
+      nodeExternals({
+        whitelist: [
+          '@humblespark/react-loadable',
+          'is-webpack-bundle',
+          'import-inspector',
+          'webpack-require-weak',
+        ],
+      }),
+    ];
     config.node = { console: true, __filename: true, __dirname: true };
   } else {
     config.node = { fs: 'empty', net: 'empty', tls: 'empty' };
   }
 
   let gerty = {};
-  try { gerty = require(path.resolve(process.cwd(), 'gerty')); } catch (e) {}
-  if (gerty.webpack) config = gerty.webpack(config, { node: IS_NODE, dev: IS_DEV }, webpack);
+  try {
+    gerty = require(path.resolve(process.cwd(), 'gerty'));
+  } catch (e) {}
+  if (gerty.webpack)
+    config = gerty.webpack(config, { node: IS_NODE, dev: IS_DEV }, webpack);
 
   config.plugins = [
     ...config.plugins,
     IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }) : null,
-    IS_WEB ? new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' }) : null,
-    IS_WEB ? new webpack.BannerPlugin({ banner: readyBanner, raw: true, exclude: /manifest\.js/ }) : null,
-    IS_WEB ? new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      },
-    }) : null,
+    IS_WEB
+      ? new webpack.optimize.CommonsChunkPlugin({ name: 'manifest' })
+      : null,
+    IS_WEB
+      ? new webpack.BannerPlugin({
+          banner: readyBanner,
+          raw: true,
+          exclude: /manifest\.js/,
+        })
+      : null,
+    IS_WEB
+      ? new webpack.DefinePlugin({
+          'process.env': {
+            NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+          },
+        })
+      : null,
     new TimerPlugin(),
     new webpack.DefinePlugin({
       SAMBELL_CLIENT_OUTPUT_DIR: JSON.stringify(getBuildDir(CLIENT_ENTRY)),

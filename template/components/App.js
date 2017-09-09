@@ -4,14 +4,12 @@ import Loadable from '@humblespark/react-loadable';
 
 const Moon = Loadable({
   loader: () => import(/* webpackChunkName: "components/Moon" */'components/Moon'),
-  webpackRequireWeakId: () => require.resolveWeak('components/Moon'),
-  chunkName: 'components/Moon',
+  loading: () => null,
 });
 
 const Outside = Loadable({
   loader: () => import(/* webpackChunkName: "components/Outside" */'components/Outside'),
-  webpackRequireWeakId: () => require.resolveWeak('components/Outside'),
-  chunkName: 'components/Outside',
+  loading: () => null,
 });
 
 export default () =>
