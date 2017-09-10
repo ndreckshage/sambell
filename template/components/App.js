@@ -1,16 +1,16 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import Loadable from '@humblespark/react-loadable';
+import BaseLoadable from '@humblespark/react-loadable';
 
-const Moon = Loadable({
-  loader: () => import(/* webpackChunkName: "components/Moon" */'components/Moon'),
-  loading: () => null,
-});
+const Loading = (props, context) => {
+  if (props.error) console.error(props.error);
+  return null;
+};
 
-const Outside = Loadable({
-  loader: () => import(/* webpackChunkName: "components/Outside" */'components/Outside'),
-  loading: () => null,
-});
+const Loadable = loader => BaseLoadable({ loader, loading: Loading });
+
+const Moon = Loadable(() => import(/* webpackChunkName: "components/Moon" */'components/Moon'));
+const Outside = Loadable(() => import(/* webpackChunkName: "components/Outside" */'components/Outside'));
 
 export default () =>
   <div>

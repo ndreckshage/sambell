@@ -14,7 +14,7 @@ import {
 
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import flushCriticalStyles from 'styled-jsx/server';
-import Loadable from '@humblespark/react-loadable';
+import { flush as flushLoadable } from '@humblespark/react-loadable';
 
 import StaticRouter from 'react-router-dom/StaticRouter';
 import App from 'components/App';
@@ -47,7 +47,7 @@ const renderApp = (req, res) => {
     res.redirect(context.url);
   } else {
     res.status(200).send(`<!doctype html>${renderToStaticMarkup(template(
-      html, flushCriticalStyles(), Loadable.flushRenderedMetadata().map(metadata => metadata.importedModulePath)
+      html, flushCriticalStyles(), flushLoadable().map(md => md.importedModulePath)
     ))}`);
   }
 }
