@@ -4,13 +4,13 @@
     "compression": "1.7.0",
     "domready": "1.0.8",
     "express": "4.15.4",
-    "react": "15.6.1",
-    "react-dom": "15.6.1",
+    "react": "16.0.0-rc.2",
+    "react-dom": "16.0.0-rc.2",
     "react-router-dom": "4.2.2",
     "styled-jsx": "1.0.10"
   },
   "devDependencies": {
-    "sambell": "5.0.1"
+    "sambell": "6.0.0"
   },
   "scripts": {
     "start": "sambell run",

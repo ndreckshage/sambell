@@ -30,6 +30,7 @@ yarn start
 
 **Performant**
 
+- React **16**
 - Server side rendering. Universal.
 - Critical styles with [styled-jsx](https://github.com/zeit/styled-jsx)
 - Async loading of routes with `react-loadable` (forked version `@humblespark/react-loadable`)
