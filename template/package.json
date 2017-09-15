@@ -9,7 +9,7 @@
     "styled-jsx": "1.0.10"
   },
   "devDependencies": {
-    "sambell": "7.0.0"
+    "sambell": "7.0.2"
   },
   "scripts": {
     "start": "sambell run",
