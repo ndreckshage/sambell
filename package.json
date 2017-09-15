@@ -1,9 +1,16 @@
 {
   "name": "sambell",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "license": "MIT",
   "files": ["bin", "scripts", "template", "webpack"],
   "homepage": "https://github.com/humblespark/sambell",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/humblespark/sambell.git"
+  },
+  "bugs": {
+    "url": "https://github.com/humblespark/sambell/issues"
+  },
   "bin": {
     "sambell": "./bin/sambell.js"
   },
