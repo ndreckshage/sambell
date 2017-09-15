@@ -1,6 +1,6 @@
 {
   "name": "sambell",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "license": "MIT",
   "files": ["bin", "scripts", "template", "webpack"],
   "bin": {
@@ -22,7 +22,6 @@
     "isomorphic-fetch": "2.2.1",
     "minimist": "1.2.0",
     "ncp": "2.0.0",
-    "react": "16.0.0-rc.2",
     "react-dev-utils": "4.0.1",
     "source-map-support": "0.4.17",
     "styled-jsx": "1.0.10",

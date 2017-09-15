@@ -11,23 +11,34 @@ const spawn = require('child_process').spawn;
 const path = require('path');
 
 if (command === 'run') {
-  spawn('node', [path.resolve(__dirname, '..', 'scripts/run.js')], { stdio: 'inherit' });
+  spawn('node', [path.resolve(__dirname, '..', 'scripts/run.js')], {
+    stdio: 'inherit',
+  });
 } else if (command === 'build') {
-  spawn('node', [path.resolve(__dirname, '..', 'scripts/build.js')], { stdio: 'inherit' });
+  spawn('node', [path.resolve(__dirname, '..', 'scripts/build.js')], {
+    stdio: 'inherit',
+  });
+} else if (command === 'watch') {
+  spawn('node', [path.resolve(__dirname, '..', 'scripts/watch.js')], {
+    stdio: 'inherit',
+  });
 } else if (command === 'new') {
   console.log(chalk.green('Cloning...'));
   const { _: [, dest] } = argv;
   const finalDest = path.resolve(process.cwd(), dest);
-  ncp(path.resolve(__dirname, '..', 'template'), finalDest, function (err) {
-   if (err) return console.error(err);
-   try {
-     fs.renameSync(path.resolve(finalDest, '.npmignore'), path.resolve(finalDest, '.gitignore'));
-   } catch (e) {} // if no .npmignore, already .gitignore
-   process.chdir(finalDest);
-   spawn('yarn', ['install'], { stdio: 'inherit' });
+  ncp(path.resolve(__dirname, '..', 'template'), finalDest, function(err) {
+    if (err) return console.error(err);
+    try {
+      fs.renameSync(
+        path.resolve(finalDest, '.npmignore'),
+        path.resolve(finalDest, '.gitignore'),
+      );
+    } catch (e) {} // if no .npmignore, already .gitignore
+    process.chdir(finalDest);
+    spawn('yarn', ['install'], { stdio: 'inherit' });
   });
 } else if (!command && (argv.v || argv.version)) {
   console.log(chalk.cyan(`sambell ${packageJson.version}`));
 } else {
-  console.log(chalk.red('Valid commands: run; build; new'));
+  console.log(chalk.red('Valid commands: run; build; watch; new'));
 }

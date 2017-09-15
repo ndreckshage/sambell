@@ -22,12 +22,14 @@ module.exports = (cb, clientConfig) => (err, multiStats) => {
   let serverEntriesByChunk = null;
 
   let hasError = false;
-  multiStats.stats.forEach((stats) => {
+  multiStats.stats.forEach(stats => {
     const json = stats.toJson({}, true);
 
     const messages = formatWebpackMessages(json);
     if (messages.errors.length) {
-      const skipErr = prevErrorTimestamp && Date.now() - prevErrorTimestamp < LIKELY_SAME_ERR;
+      const skipErr =
+        prevErrorTimestamp && Date.now() - prevErrorTimestamp < LIKELY_SAME_ERR;
+
       prevErrorTimestamp = Date.now();
       hasError = true;
 
@@ -40,7 +42,9 @@ module.exports = (cb, clientConfig) => (err, multiStats) => {
     }
 
     if (messages.warnings.length) {
-      const skipErr = prevWarnTimestamp && Date.now() - prevWarnTimestamp < LIKELY_SAME_ERR;
+      const skipErr =
+        prevWarnTimestamp && Date.now() - prevWarnTimestamp < LIKELY_SAME_ERR;
+
       prevWarnTimestamp = Date.now();
 
       if (!skipErr) {
@@ -52,7 +56,11 @@ module.exports = (cb, clientConfig) => (err, multiStats) => {
     if (!messages.errors.length && !messages.warnings.length) {
       const IS_WEB = stats.compilation.compiler.options.target === 'web';
       const chalkColor = IS_WEB ? 'blue' : 'magenta';
-      console.log(chalk[chalkColor](`${chalk.bold(IS_WEB ? 'CLIENT' : 'SERVER')} (${json.time}ms)`));
+      console.log(
+        chalk[chalkColor](
+          `${chalk.bold(IS_WEB ? 'CLIENT' : 'SERVER')} (${json.time}ms)`,
+        ),
+      );
 
       json.assets.map(asset => {
         const assetPath = path.join(clientConfig.output.path, asset.name);
@@ -60,7 +68,9 @@ module.exports = (cb, clientConfig) => (err, multiStats) => {
         let size = '';
         if (IS_WEB && process.env.NODE_ENV === 'production') {
           const fileContents = fs.readFileSync(assetPath);
-          size = ` (SIZE AFTER GZIP: ${chalk.bold(filesize(gzipSize(fileContents)))})`;
+          size = ` (SIZE AFTER GZIP: ${chalk.bold(
+            filesize(gzipSize(fileContents)),
+          )})`;
         }
 
         console.log(chalk[chalkColor](`${asset.name}${size}`));

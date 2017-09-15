@@ -1,6 +1,6 @@
 const webpack = require('webpack');
-const webpackClientProdConfig = require('./../webpack/webpack.config.client.prod');
-const webpackServerProdConfig = require('./../webpack/webpack.config.server.prod');
+const webpackClientDevConfig = require('./../webpack/webpack.config.client.dev');
+const webpackServerDevConfig = require('./../webpack/webpack.config.server.dev');
 const handleWebpackStats = require('./../webpack/handle-stats');
 const replaceEntry = require('./../webpack/replace-entry');
 const chalk = require('chalk');
@@ -12,30 +12,23 @@ const finalize = (
   _clientEntriesByChunk = null,
 ) => {
   if (_clientEntriesByChunk) clientEntriesByChunk = _clientEntriesByChunk;
-  if (!serverEntriesByChunk || !clientEntriesByChunk) {
-    console.log(
-      chalk.red('No client/server entry.'),
-      clientEntriesByChunk,
-      serverEntriesByChunk,
-    );
-    return;
-  }
+  if (!serverEntriesByChunk || !clientEntriesByChunk) return;
 
   const serverEntry = serverEntriesByChunk.run[0];
   const serverPath = path.resolve(
-    webpackServerProdConfig.output.path,
+    webpackServerDevConfig.output.path,
     serverEntry,
   );
 
   replaceEntry(
-    webpackServerProdConfig,
-    webpackClientProdConfig,
+    webpackServerDevConfig,
+    webpackClientDevConfig,
     serverEntriesByChunk,
     clientEntriesByChunk,
     () => {
       console.log(
         chalk.green(
-          `Production version built. Run... ${chalk.bold(
+          `Development version compiled. Run... ${chalk.bold(
             `node ${path.relative(process.cwd(), serverPath)}`,
           )}`,
         ),
@@ -45,6 +38,7 @@ const finalize = (
   );
 };
 
-webpack([webpackClientProdConfig, webpackServerProdConfig]).run(
-  handleWebpackStats(finalize, webpackClientProdConfig),
+webpack([webpackClientDevConfig, webpackServerDevConfig]).watch(
+  {},
+  handleWebpackStats(finalize, webpackClientDevConfig),
 );

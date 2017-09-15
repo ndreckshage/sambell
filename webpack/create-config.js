@@ -4,8 +4,12 @@ const TimerPlugin = require('./timer-plugin');
 const path = require('path');
 const readyBanner = require('./ready-banner');
 
-const BUILD_PREFIX = '.sambell';
-const getBuildDir = scope => path.join(BUILD_PREFIX, scope);
+const gerty = require(path.resolve(process.cwd(), 'gerty'));
+const CLIENT_ENTRY = gerty.clientEntry;
+const SERVER_ENTRY = gerty.serverEntry;
+const CLIENT_OUTPUT_DIR = gerty.clientOutputDirectory;
+const SERVER_OUTPUT_DIR = gerty.serverOutputDirectory;
+const PUBLIC_PATH = gerty.publicPath;
 
 module.exports = (target = 'web', env = 'dev') => {
   const IS_NODE = target === 'node';
@@ -15,32 +19,34 @@ module.exports = (target = 'web', env = 'dev') => {
   const IS_DEV = env === 'dev';
   process.env.NODE_ENV = IS_PROD ? 'production' : 'development';
 
-  const SERVER_ENTRY = 'server';
-  const CLIENT_ENTRY = 'client';
-  const scope = IS_NODE ? SERVER_ENTRY : CLIENT_ENTRY;
+  const entryModule = IS_NODE ? SERVER_ENTRY : CLIENT_ENTRY;
+  const outputDir = IS_NODE ? SERVER_OUTPUT_DIR : CLIENT_OUTPUT_DIR;
 
-  const buildDir = getBuildDir(scope);
+  const entry = {
+    run: [
+      IS_NODE ? require.resolve('source-map-support/register') : null,
+      IS_NODE ? require.resolve('isomorphic-fetch/fetch-npm-node') : null,
+      entryModule,
+    ].filter(Boolean),
+  };
+
+  if (IS_WEB) {
+    entry.vendor = [
+      require.resolve('babel-polyfill'),
+      require.resolve('isomorphic-fetch/fetch-npm-browserify'),
+      'react',
+      'react-dom',
+    ];
+  }
 
   let config = {
-    target: target,
     context: process.cwd(),
-    entry: {
-      run: [
-        IS_NODE ? require.resolve('source-map-support/register') : null,
-        IS_NODE ? require.resolve('isomorphic-fetch/fetch-npm-node') : null,
-        scope,
-      ].filter(x => x),
-      vendor: [
-        require.resolve('babel-polyfill'),
-        require.resolve('isomorphic-fetch/fetch-npm-browserify'),
-        'react',
-        'react-dom',
-      ].filter(x => x),
-    },
+    target,
+    entry,
 
     output: {
-      path: path.resolve(process.cwd(), buildDir),
-      publicPath: '/static/webpack/',
+      path: path.resolve(process.cwd(), outputDir),
+      publicPath: PUBLIC_PATH,
       filename: `${IS_WEB && IS_PROD ? '[hash].' : ''}[name].js`,
       chunkFilename: `${IS_WEB && IS_PROD ? '[chunkhash].' : ''}[id].[name].js`,
     },
@@ -73,8 +79,18 @@ module.exports = (target = 'web', env = 'dev') => {
                 require.resolve('babel-plugin-module-resolver'),
                 {
                   alias: {
-                    'sambell/env': path.resolve(__dirname, 'sambell-env'),
-                    'sambell/ready': path.resolve(__dirname, 'sambell-ready'),
+                    'sambell/server': path.resolve(
+                      __dirname,
+                      '..',
+                      'modules',
+                      'server',
+                    ),
+                    'sambell/client': path.resolve(
+                      __dirname,
+                      '..',
+                      'modules',
+                      'client',
+                    ),
                   },
                 },
               ],
@@ -106,7 +122,7 @@ module.exports = (target = 'web', env = 'dev') => {
             exclude: /manifest\.js/,
           })
         : null,
-    ].filter(a => a),
+    ].filter(Boolean),
 
     devtool: IS_DEV
       ? 'cheap-module-source-map'
@@ -131,12 +147,15 @@ module.exports = (target = 'web', env = 'dev') => {
     config.node = { fs: 'empty', net: 'empty', tls: 'empty' };
   }
 
-  let gerty = {};
-  try {
-    gerty = require(path.resolve(process.cwd(), 'gerty'));
-  } catch (e) {}
-  if (gerty.webpack)
-    config = gerty.webpack(config, { node: IS_NODE, dev: IS_DEV }, webpack);
+  if (gerty.webpack) {
+    config = gerty.webpack(config, {
+      webpack,
+      env: {
+        IS_NODE,
+        IS_DEV,
+      },
+    });
+  }
 
   config.plugins = [
     ...config.plugins,
@@ -159,11 +178,7 @@ module.exports = (target = 'web', env = 'dev') => {
         })
       : null,
     new TimerPlugin(),
-    new webpack.DefinePlugin({
-      SAMBELL_CLIENT_OUTPUT_DIR: JSON.stringify(getBuildDir(CLIENT_ENTRY)),
-      SAMBELL_PUBLIC_PATH: JSON.stringify(config.output.publicPath),
-    }),
-  ].filter(x => x);
+  ].filter(Boolean);
 
   return config;
 };

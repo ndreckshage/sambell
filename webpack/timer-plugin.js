@@ -8,8 +8,11 @@ var prevCompileStartTime = null;
 function TimerPlugin() {}
 
 TimerPlugin.prototype.apply = function(compiler) {
-  compiler.plugin("compile", function(params) {
-    const skipMessage = prevCompileStartTime && Date.now() - prevCompileStartTime < LIKELY_SAME_COMPILE;
+  compiler.plugin('compile', function(params) {
+    const skipMessage =
+      prevCompileStartTime &&
+      Date.now() - prevCompileStartTime < LIKELY_SAME_COMPILE;
+
     prevCompileStartTime = Date.now();
 
     if (!skipMessage) {
@@ -19,6 +22,6 @@ TimerPlugin.prototype.apply = function(compiler) {
       console.log(chalk.green('Compiling...'));
     }
   });
-}
+};
 
 module.exports = TimerPlugin;

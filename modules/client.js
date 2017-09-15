@@ -1,3 +1,5 @@
+// @NOTE ensure all of our async scripts load before loading our app
+
 let ready = false;
 let clientCalledReady = false;
 let clientCb = () => {};
@@ -11,11 +13,11 @@ const maybeLoad = () => {
     ready = true;
     clientCb();
   }
-}
+};
 
 window.__SAMBELL_CHUNK_CB__ = maybeLoad;
 
-export default cb => {
+export const scriptsReady = cb => {
   clientCalledReady = true;
   clientCb = cb;
   maybeLoad();

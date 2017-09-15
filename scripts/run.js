@@ -9,12 +9,18 @@ const path = require('path');
 
 var server = null;
 var clientEntriesByChunk = '';
-const refreshServer = (serverEntriesByChunk = null, _clientEntriesByChunk = null) => {
+const refreshServer = (
+  serverEntriesByChunk = null,
+  _clientEntriesByChunk = null,
+) => {
   if (_clientEntriesByChunk) clientEntriesByChunk = _clientEntriesByChunk;
   if (!serverEntriesByChunk || !clientEntriesByChunk) return;
 
   const serverEntry = serverEntriesByChunk.run[0];
-  const serverPath = path.resolve(webpackServerDevConfig.output.path, serverEntry);
+  const serverPath = path.resolve(
+    webpackServerDevConfig.output.path,
+    serverEntry,
+  );
 
   replaceEntry(
     webpackServerDevConfig,
@@ -23,20 +29,23 @@ const refreshServer = (serverEntriesByChunk = null, _clientEntriesByChunk = null
     clientEntriesByChunk,
     () => {
       if (server) server.kill();
-      console.log(chalk.green(`${server ? 'Restarting' : 'Starting'} sambell...`));
-      server = spawn('node', [serverPath], { stdio: 'inherit', env: process.env });
-      console.log(chalk.green(`${chalk.bold('RUN!')} (localhost:${process.env.PORT || 3000})`));
-    }
+      console.log(
+        chalk.green(`${server ? 'Restarting' : 'Starting'} sambell...`),
+      );
+      server = spawn('node', [serverPath], {
+        stdio: 'inherit',
+        env: process.env,
+      });
+      console.log(
+        chalk.green(
+          `${chalk.bold('RUN!')} (localhost:${process.env.PORT || 3000})`,
+        ),
+      );
+    },
   );
 };
 
-webpack([
-  webpackClientDevConfig,
-  webpackServerDevConfig,
-]).watch(
+webpack([webpackClientDevConfig, webpackServerDevConfig]).watch(
   {},
-  handleWebpackStats(
-    refreshServer,
-    webpackClientDevConfig
-  )
+  handleWebpackStats(refreshServer, webpackClientDevConfig),
 );
