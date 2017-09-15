@@ -1,4 +1,4 @@
-# sambell
+# :new_moon::new_moon::new_moon: sambell :new_moon::new_moon::new_moon:
 create performant server-rendered React applications with no build configuration; ideal for universal react-router projects.
 
 - similar to [create-react-app](https://github.com/facebookincubator/create-react-app), but server side rendering.
@@ -71,3 +71,7 @@ module.exports = {
   webpack: config => config,
 };
 ```
+
+:rocket: -> :no_entry_sign: :earth_americas:
+
+:alien:
