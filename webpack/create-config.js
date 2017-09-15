@@ -79,18 +79,8 @@ module.exports = (target = 'web', env = 'dev') => {
                 require.resolve('babel-plugin-module-resolver'),
                 {
                   alias: {
-                    'sambell/server': path.resolve(
-                      __dirname,
-                      '..',
-                      'modules',
-                      'server',
-                    ),
-                    'sambell/client': path.resolve(
-                      __dirname,
-                      '..',
-                      'modules',
-                      'client',
-                    ),
+                    'sambell/server': path.resolve(__dirname, 'sambell-server'),
+                    'sambell/client': path.resolve(__dirname, 'sambell-client'),
                   },
                 },
               ],
