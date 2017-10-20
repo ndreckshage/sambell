@@ -2,14 +2,14 @@
   "dependencies": {
     "@humblespark/react-loadable": "4.2.0",
     "domready": "1.0.8",
-    "express": "4.15.4",
-    "react": "16.0.0-rc.3",
-    "react-dom": "16.0.0-rc.3",
+    "express": "4.16.2",
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
     "react-router-dom": "4.2.2",
-    "styled-jsx": "1.0.10"
+    "styled-jsx": "2.1.2"
   },
   "devDependencies": {
-    "sambell": "7.0.3"
+    "sambell": "8.0.0"
   },
   "scripts": {
     "start": "sambell run",
