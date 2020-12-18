@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This project is deprecated. Use next.js, etc.
+
+---
+
 # :new_moon::new_moon::new_moon: sambell :new_moon::new_moon::new_moon:
 create performant server-rendered React applications with no build configuration; ideal for universal react-router projects.
 
